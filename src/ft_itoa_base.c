@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 15:35:50 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/09 16:20:43 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/12 15:04:49 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,16 @@ char						*ft_itoa_base(unsigned long long value, int base)
 {
 	int		i;
 	char	*nbr;
-	int		neg;
 
 	i = 1;
-	neg = 0;
 	while (ft_pow(base, i) - 1 < value)
 		i++;
 	nbr = (char*)malloc(sizeof(nbr) * i);
-	nbr[i + neg] = '\0';
+	nbr[i] = '\0';
 	while (i-- > 0)
 	{
-		nbr[i + neg] = (value % base) + (value % base > 9 ? 'a' - 10 : '0');
+		nbr[i] = (value % base) + (value % base > 9 ? 'a' - 10 : '0');
 		value = value / base;
 	}
-	if (neg)
-		nbr[0] = '-';
 	return (nbr);
 }

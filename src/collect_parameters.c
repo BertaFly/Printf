@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:36:16 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/09 18:00:05 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/12 15:06:38 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,22 @@ int			ft_mem_size(const char *format, int i, t_args *flags)
 	return (i);
 }
 
+int			ft_mem_digit(const char *format, int i, t_args *flags)
+{
+	if (*format == '.')
+	{
+		flags->precigion = ft_atoi(&format[1]);
+		flags->is_precigion = 1;
+		i = i + ft_len(flags->precigion);
+	}
+	else
+	{
+		flags->width = ft_atoi(format);
+		i = i + ft_len(flags->width) - 1;
+	}
+	return (i);
+}
+
 int			ft_parce_flags(const char *format, t_args *flags)
 {
 	int	i;
@@ -87,29 +103,18 @@ int			ft_parce_flags(const char *format, t_args *flags)
 	{
 		if (FLG(format[i]))
 			ft_mem_flg(&format[i], flags);
-		else if (ft_isdigit(format[i]))
-		{
-			flags->width = ft_atoi(&format[i]);
-			i = i + ft_len(flags->width) - 1;
-		}
-		else if (format[i] == '.')
-		{
-			flags->precigion = ft_atoi(&format[i + 1]);
-			flags->is_precigion = 1;
-			i = i + ft_len(flags->precigion);
-		}
+		else if (ft_isdigit(format[i]) || format[i] == '.')
+			i = ft_mem_digit(&format[i], i, flags);
 		else if (SIZE(format[i]))
 			i = ft_mem_size(format, i, flags);
 		else if (SPECS(format[i]))
 		{
-			flags->spec = format[i];
-			i++;
+			flags->spec = format[i++];
 			break ;
 		}
 		else if (ERROR(format[i]) && ft_isdigit(format[i]) == 0)
 		{
-			flags->hold = format[i];
-			i++;
+			flags->hold = format[i++];
 			break ;
 		}
 		i++;

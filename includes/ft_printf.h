@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/09 17:49:28 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/12 20:42:38 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ x != 'h' && x != 'l' && x != 'j' && x != 'z'
 x == 'o' || x == 'O' || x == 'u' || x == 'U' || x == 'x' || x == 'X'
 # define U_NUM(x) x == 'o' || x == 'O' || x == 'x' || x == 'X' || \
 x == 'u' || x == 'U' || x == 'p'
+# define NOT_HASH flags->hash == '0' || (flags->spec != 'p' && \
+flags->spec != 'o' && flags->spec != 'O' && flags->spec != 'x' && \
+flags->spec != 'X') || (*str[0] == '0' && (flags->spec == 'o' || \
+flags->spec == 'O'))
 
 #include <stdarg.h>
 #include <fcntl.h>
@@ -56,7 +60,13 @@ char				*ft_itoa_base(unsigned long long value, int base);
 void				ft_put_struct(t_args *param);
 void				ft_mem_flg(const char *format, t_args *flags);
 int					ft_mem_size(const char *format, int i, t_args *flags);
+int					ft_mem_digit(const char *format, int i, t_args *flags);
 int					ft_parce_flags(const char *format, t_args *flags);
+void				ft_process_num(char **tmp, t_args *flags, va_list **param);
+void				ft_aply_precigion_str(char **str, t_args *flags);
+void				ft_aply_precigion_nbr(char **str, t_args *flags);
+void				ft_aply_hash_2(char *tmp, int len, char **str);
+void				ft_aply_hash(char **str, t_args *flags);
 int					ft_put_arg(t_args *flags, va_list **param);
 void				ft_aply_width(char **str, t_args *flags);
 void				ft_aply_width_not_nbr(char **str, t_args *flags);

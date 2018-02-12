@@ -6,7 +6,7 @@
 #    By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/15 13:16:28 by inovykov          #+#    #+#              #
-#    Updated: 2018/02/09 17:36:45 by inovykov         ###   ########.fr        #
+#    Updated: 2018/02/12 15:51:31 by inovykov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ DIR_O = obj
 
 HEADER = includes
 
-SOURCES = ft_printf.c ft_itoa_base.c ft_itoa_un.c collect_parameters.c
+SOURCES = ft_printf.c ft_itoa_base.c ft_itoa_un.c collect_parameters.c \
+			process_num.c aply_param.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
