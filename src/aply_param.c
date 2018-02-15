@@ -17,11 +17,24 @@ void	ft_aply_precision_str(char **str, t_args *flags)
 	char	*tmp;
 	int		k;
 
+	// printf("*****I am aplying precision for str\n");
+	// printf("precision = %d\n", flags->precision);
 	tmp = ft_strdup(*str);
-	ft_bzero(*str, ft_strlen(tmp));
+//	printf("tmp: %s\n", tmp);
+	// size_t len = ft_strlen(tmp);
+//	printf("len %zu\n", len);
+//	printf("str: %s\n", *str);
+
+	ft_memset((void*)*str, 0, ft_strlen(tmp));
+	// printf("after bzero\n");
 	k = -1;
 	while (++k < flags->precision)
+	{
+		// printf("in a while\n");
 		str[0][k] = tmp[k];
+		// printf("str[0][%d] %c\n", k, str[0][k]);
+	}
+	// printf("->curently str is: %s<-\n", str[0]);
 	free(tmp);
 }
 
@@ -49,6 +62,7 @@ void	ft_aply_precision_nbr(char **str, t_args *flags)
 	}
 	if ((IS_NUM(flags->spec)) && flags->is_precision == 1 && flags->precision == 0 && ft_atoi(*str) == 0)
 		str[0][0] = '\0';
+	// printf(">>>>>I am in ft_aply_precision_nbr\n");
 	if (flags->spec == 's' && flags->precision < (int)len)
 		ft_aply_precision_str(str, flags);
 }
@@ -98,11 +112,12 @@ void	ft_aply_width_not_nbr(char **str, t_args *flags)
 	int		len;
 	int		i;
 	
+	// printf("----aplying width-----\n");
 	len = (int)ft_strlen(*str);
 	i = -1;
 	tmp = ft_strdup(*str);
-	free(*str);
 	*str = ft_strnew(flags->width);
+	// printf("flag->width %d\n", flags->width);
 	if (flags->zero == '1' && flags->minus == '0')
 		ft_memset((void*)*str, '0', (size_t)flags->width);
 	else
@@ -116,6 +131,8 @@ void	ft_aply_width_not_nbr(char **str, t_args *flags)
 	{
 		while (--len > -1)
 			str[0][--flags->width] = tmp[len];
+
+		// printf("str after aply width %s\n", res);
 	}
 	free(tmp);
 }
@@ -177,6 +194,7 @@ int	ft_put_arg(t_args *flags, va_list **param)
 {
 	int		len;
 	char	*tmp;
+//    char    *res;
 
 	tmp = NULL;
 	if (flags->spec == 'c' || flags->spec == '0')
@@ -196,7 +214,9 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	}
 	else if (flags->spec == 's')
 	{
-		tmp = va_arg(**param, char *);
+		// printf("       spec is str\n");
+		tmp = ft_strdup((char *)va_arg(**param, char*));
+		// tmp = (char *)va_arg(**param, char*);
 		if (tmp == NULL)
 		{
 			tmp = ft_strnew(6);

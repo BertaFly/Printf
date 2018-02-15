@@ -25,14 +25,14 @@ int	ft_printf_exten(const char *format, va_list *param)
 	i = 0;
 	while (format[i] != '\0')
 	{
-		// printf("here\n");
+		// printf("at the begining of printf\n");
 		count = 0;
 		res = 0;
 		while(format[i] != '%' && format[i] != '\0')
 		{
 			write(1, &format[i++], 1);
 			count++;
-			// printf("put space\n");
+			// printf("put everything exepf after %%\n");
 		}
 		if (format[i] == '%')
 		{
@@ -41,7 +41,6 @@ int	ft_printf_exten(const char *format, va_list *param)
 				write(1, &format[i], 1);
 				i = i + 2;
 				count++;
-
 			}
 			else
 			{
@@ -51,6 +50,7 @@ int	ft_printf_exten(const char *format, va_list *param)
 				j = ft_parce_flags(&format[i], &flags);
 				// printf("after parce\n");
 				res = ft_put_arg(&flags, &param);
+				// printf("apperently I use all parameters %%\n");
 				i = i + j;
 			}
 		}

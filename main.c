@@ -16,6 +16,7 @@ int	main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
+//	char str[] = "this";
 	// ft_printf("%010x\n", 542);
 	// ft_printf("%#x\n", 0);
 	// ft_printf("%#08x\n", 42);
@@ -36,8 +37,22 @@ int	main(int ac, char **av)
 	// ft_printf("%.2c\n", NULL);
 	// ft_printf("%.2c\n", 'a');
 	// ft_printf("%s %s\n", NULL, "str");
-	ft_printf("@moulitest: %c\n", 0);
-	printf("@moulitest: %c", 0);
+	// ft_printf("@moulitest: %c\n", 0);
+	// printf("@moulitest: %c", 0);
+	ft_printf("%5.2s is a string\n", "this");
+	printf("%5.2s is a string\n\n", "this");
+	ft_printf("%10s is a string\n", "");
+	printf("%10s is a string\n\n", "");
+	ft_printf("%10s is a string\n", "");
+	printf("%10s is a string\n\n", "");
+	ft_printf("%-10s is a string\n", "this");
+	printf("%-10s is a string\n\n", "this");
+	ft_printf("%-5.2s is a string\n", "this");
+	printf("%-5.2s is a string\n\n", "this");
+	ft_printf("%-10s is a string\n", "");
+	printf("%-10s is a string\n\n", "");
+	ft_printf("%-5.2s is a string\n", "");
+	printf("%-5.2s is a string\n\n", "");
 
 	// ft_printf("%s %s\n", NULL, "string");
 	// printf("%s %s", NULL, "string");
