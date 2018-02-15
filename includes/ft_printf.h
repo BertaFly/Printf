@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/12 20:42:38 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/13 14:49:00 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ typedef struct	s_args
 	char	zero;
 	char	star;
 	int		width;
-	int		is_precigion;
-	int		precigion;
+	int		is_precision;
+	int		precision;
 	char	size;
 	char	spec;
 	char	hold;
@@ -63,15 +63,15 @@ int					ft_mem_size(const char *format, int i, t_args *flags);
 int					ft_mem_digit(const char *format, int i, t_args *flags);
 int					ft_parce_flags(const char *format, t_args *flags);
 void				ft_process_num(char **tmp, t_args *flags, va_list **param);
-void				ft_aply_precigion_str(char **str, t_args *flags);
-void				ft_aply_precigion_nbr(char **str, t_args *flags);
+void				ft_aply_precision_str(char **str, t_args *flags);
+void				ft_aply_precision_nbr(char **str, t_args *flags);
 void				ft_aply_hash_2(char *tmp, int len, char **str);
 void				ft_aply_hash(char **str, t_args *flags);
 int					ft_put_arg(t_args *flags, va_list **param);
 void				ft_aply_width(char **str, t_args *flags);
 void				ft_aply_width_not_nbr(char **str, t_args *flags);
 void				ft_aply_hash(char **str, t_args *flags);
-void				ft_aply_precigion(char **str, t_args *flags);
+void				ft_aply_precision(char **str, t_args *flags);
 long long			ft_aply_size(t_args *flags, va_list *param);
 uintmax_t			ft_aply_size_un(t_args *flags, va_list *param);
 int					ft_printf_exten(const char *format, va_list *param);

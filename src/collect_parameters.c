@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:36:16 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/12 15:06:38 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/12 20:56:32 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void		ft_put_struct(t_args *param)
 	param->zero = '0';
 	param->star = '0';
 	param->width = 0;
-	param->is_precigion = 0;
-	param->precigion = 0;
+	param->is_precision = 0;
+	param->precision = 0;
 	param->size = '0';
 	param->spec = '0';
 	param->hold = '0';
@@ -82,9 +82,9 @@ int			ft_mem_digit(const char *format, int i, t_args *flags)
 {
 	if (*format == '.')
 	{
-		flags->precigion = ft_atoi(&format[1]);
-		flags->is_precigion = 1;
-		i = i + ft_len(flags->precigion);
+		flags->precision = ft_atoi(&format[1]);
+		flags->is_precision = 1;
+		i = i + ft_len(flags->precision);
 	}
 	else
 	{

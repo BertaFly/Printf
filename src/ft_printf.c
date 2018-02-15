@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 14:53:10 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/09 17:30:20 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:36:18 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ int	ft_printf_exten(const char *format, va_list *param)
 	i = 0;
 	while (format[i] != '\0')
 	{
+		// printf("here\n");
 		count = 0;
 		res = 0;
 		while(format[i] != '%' && format[i] != '\0')
 		{
 			write(1, &format[i++], 1);
 			count++;
+			// printf("put space\n");
 		}
 		if (format[i] == '%')
 		{
@@ -39,12 +41,15 @@ int	ft_printf_exten(const char *format, va_list *param)
 				write(1, &format[i], 1);
 				i = i + 2;
 				count++;
+
 			}
 			else
 			{
 				ft_put_struct(&flags);
 				i++;
+				// printf("bef parce\n");
 				j = ft_parce_flags(&format[i], &flags);
+				// printf("after parce\n");
 				res = ft_put_arg(&flags, &param);
 				i = i + j;
 			}

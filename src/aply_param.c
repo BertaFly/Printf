@@ -6,13 +6,13 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/12 20:48:37 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:51:16 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-void	ft_aply_precigion_str(char **str, t_args *flags)
+void	ft_aply_precision_str(char **str, t_args *flags)
 {
 	char	*tmp;
 	int		k;
@@ -20,20 +20,20 @@ void	ft_aply_precigion_str(char **str, t_args *flags)
 	tmp = ft_strdup(*str);
 	ft_bzero(*str, ft_strlen(tmp));
 	k = -1;
-	while (++k < flags->precigion)
+	while (++k < flags->precision)
 		str[0][k] = tmp[k];
 	free(tmp);
 }
 
-void	ft_aply_precigion_nbr(char **str, t_args *flags)
+void	ft_aply_precision_nbr(char **str, t_args *flags)
 {
 	char	*tmp;
 	size_t	len;
 	int		k;
 	
-	k = flags->precigion;
+	k = flags->precision;
 	len = ft_strlen(*str);
-	if ((IS_NUM(flags->spec)) && (int)len < flags->precigion)
+	if ((IS_NUM(flags->spec)) && (int)len < flags->precision)
 	{
 		tmp = ft_strdup(*str);
 		free(*str);
@@ -47,8 +47,10 @@ void	ft_aply_precigion_nbr(char **str, t_args *flags)
 			str[0][k] = '0';
 		free(tmp);
 	}
-	if (flags->spec == 's' && flags->precigion < (int)len)
-		ft_aply_precigion_str(str, flags);
+	if ((IS_NUM(flags->spec)) && flags->is_precision == 1 && flags->precision == 0 && ft_atoi(*str) == 0)
+		str[0][0] = '\0';
+	if (flags->spec == 's' && flags->precision < (int)len)
+		ft_aply_precision_str(str, flags);
 }
 
 void	ft_aply_hash_2(char *tmp, int len, char **str)
@@ -68,7 +70,7 @@ void	ft_aply_hash(char **str, t_args *flags)
 	int		len;
 	int		k;
 	
-	if (NOT_HASH)
+	if ((NOT_HASH) || ft_atoi(*str) == 0)
 		return ;
 	tmp = ft_strdup(*str);
 	len = (int)ft_strlen(*str);
@@ -131,7 +133,7 @@ void	ft_aply_width(char **str, t_args *flags)
 	tmp = ft_strdup(*str);
 	free(*str);
 	*str = ft_strnew(flags->width);
-	if (flags->zero == '1' && flags->minus == '0' && flags->is_precigion == '0')
+	if (flags->zero == '1' && flags->minus == '0' && flags->is_precision == 0)
 		ft_memset((void*)*str, '0', (size_t)flags->width);
 	else
 		ft_memset((void*)*str, ' ', (size_t)flags->width);
@@ -147,7 +149,11 @@ void	ft_aply_width(char **str, t_args *flags)
 	else
 	{
 		while (--len > -1 && tmp[len] != '-')
+		{
+			if ((tmp[len] == 'x' || tmp[len] == 'X') && flags->zero == '1' && flags->is_precision == 0)
+				break ;
 			str[0][--flags->width] = tmp[len];
+		}
 		if (ft_atoi(tmp) < 0)
 			str[0][0] = '-';
 		if (flags->plus == '1' && flags->zero == '0' && ft_atoi(tmp) > 0 && flags->space == '0')
@@ -156,6 +162,60 @@ void	ft_aply_width(char **str, t_args *flags)
 			str[0][0] = '+';
 		if (flags->plus == '0' && ft_atoi(tmp) > 0 && flags->space == '1')
 			str[0][0] = ' ';
+		if ((ft_strchr(tmp, 'x') != NULL || ft_strchr(tmp, 'X') != NULL) && flags->zero == '1' && flags->is_precision == 0)
+		{
+			if (ft_strchr(tmp, 'X') != NULL)
+				str[0][1] = 'X';
+			else
+				str[0][1] = 'x';
+		}
 	}
 	free(tmp);
+}
+
+int	ft_put_arg(t_args *flags, va_list **param)
+{
+	int		len;
+	char	*tmp;
+
+	tmp = NULL;
+	if (flags->spec == 'c' || flags->spec == '0')
+	{
+		tmp = ft_strnew(1);
+		if (flags->spec == 'c')
+			tmp[0] = (char)va_arg(**param, int);
+		else
+			tmp[0] = flags->hold;
+		if (tmp[0] == (char)NULL)
+		{
+			write(1, "\0", 1);
+			// tmp[0] = '\0';
+			len = 1;
+			return (len);
+		}
+	}
+	else if (flags->spec == 's')
+	{
+		tmp = va_arg(**param, char *);
+		if (tmp == NULL)
+		{
+			tmp = ft_strnew(6);
+			tmp = "(null)";
+		}
+	}
+	else
+		ft_process_num(&tmp, flags, param);
+	if (flags->is_precision == 1)
+		ft_aply_precision_nbr(&tmp, flags);
+	ft_aply_hash(&tmp, flags);
+	if (flags->width > (int)ft_strlen(tmp))
+	{
+		if (!(IS_NUM(flags->spec)))
+			ft_aply_width_not_nbr(&tmp, flags);
+		else
+			ft_aply_width(&tmp, flags);
+	}
+	len = (int)ft_strlen(tmp);
+	write(1, tmp, len);
+	return (len);
 }

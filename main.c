@@ -6,57 +6,52 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:33:29 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/12 20:48:24 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:50:56 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 
-int	ft_put_arg(t_args *flags, va_list **param)
-{
-	int		len;
-	char	*tmp;
-
-	tmp = NULL;
-	if (flags->spec == 'c' || flags->spec == '0')
-	{
-		tmp = ft_strnew(1);
-		if (flags->spec == 'c')
-			tmp[0] = (char)va_arg(**param, int);
-		else
-			tmp[0] = flags->hold;
-	}
-	else if (flags->spec == 's')
-		tmp = ft_strdup(va_arg(**param, char *));
-	else
-		ft_process_num(&tmp, flags, param);
-	if (flags->is_precigion == 1)
-		ft_aply_precigion_nbr(&tmp, flags);
-	ft_aply_hash(&tmp, flags);
-	if (flags->width > (int)ft_strlen(tmp))
-	{
-		if (!(IS_NUM(flags->spec)))
-			ft_aply_width_not_nbr(&tmp, flags);
-		else
-			ft_aply_width(&tmp, flags);
-	}
-	len = (int)ft_strlen(tmp);
-	write(1, tmp, len);
-	return (len);
-}
-
 int	main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
+	// ft_printf("%010x\n", 542);
+	// ft_printf("%#x\n", 0);
+	// ft_printf("%#08x\n", 42);
+	// ft_printf("%#8x\n", 42);
+	// printf("%#8x\n", 42);
+	// ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
+	// printf("@moulitest: %#.x %#.0x\n", 0, 0);
+	// ft_printf("@moulitest: %.x %.0x\n", 0, 0);
+	// printf("@moulitest: %.x %.0x\n", 0, 0);
+	// ft_printf("@moulitest: %5.x %5.0x\n", 0, 0);
+	// printf("@moulitest: %5.x %5.0x\n", 0, 0);
+	 // ft_printf("%.2x\n", 5427);
+	 // printf("%.2x\n", 5427);
+	// ft_printf("%5.2x", 5427);
+	// printf("%5.2x", 5427);
+	// ft_printf("@moulitest: %s\n", NULL);
+	// printf("@moulitest: %s\n", NULL);
+	// ft_printf("%.2c\n", NULL);
+	// ft_printf("%.2c\n", 'a');
+	// ft_printf("%s %s\n", NULL, "str");
+	ft_printf("@moulitest: %c\n", 0);
+	printf("@moulitest: %c", 0);
+
+	// ft_printf("%s %s\n", NULL, "string");
+	// printf("%s %s", NULL, "string");
+
+	// printf("%.2c\n", NULL);
+	// printf("%010x\n", 542);
 	// ft_printf("hexedec con 0x %#x\n", 7561);
 	// printf("hexedec con 0x %#x\n", 7561);
 	
 	// ft_printf("hexedec con 0x and prec %#.10x\n", 7561);
 	// printf("hexedec con 0x and prec %#.10x\n", 7561);
 
-	ft_printf("octal %#o\n", 100);
-	printf("octal %#o\n", 100);
+	// ft_printf("octal %#o\n", 100);
+	// printf("octal %#o\n", 100);
 	
 	// ft_printf("hexedec con 0x and prec %#010.0x\n", 7561);
 	// printf("hexedec con 0x and prec %#010.0x\n", 7561);
