@@ -6,22 +6,22 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/22 15:46:40 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/22 18:57:24 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-// int		only_space(char *str)
-// {
-// 	while (*str)
-// 	{
-// 		if (*str != ' ')
-// 			return (0);
-// 		str++;
-// 	}
-// 	return (1);
-// }
+int		only_space(char *str)
+{
+	while (*str)
+	{
+		if (*str != ' ')
+			return (0);
+		str++;
+	}
+	return (1);
+}
 
 void	ft_aply_precision_str(char **str, t_args *flags)
 {
@@ -88,9 +88,16 @@ void	ft_aply_hash_2(char *tmp, int len, char **str)
 
 	k = len + 1;
 	*str = ft_strnew(k);
-	while (--len > -1)
-		str[0][--k] = tmp[len];
-	str[0][--k] = '0';
+	// printf("aply hash 2\n");
+	while (len >= 0)
+	{
+		str[0][k] = tmp[len];
+		// printf("in str - %c\n", str[0][k]);
+		len--;
+		k--;
+	}
+	str[0][k] = '0';
+	// printf("str full %s\n", str[0]);
 }
 
 void	ft_aply_hash(char **str, t_args *flags)
@@ -99,8 +106,10 @@ void	ft_aply_hash(char **str, t_args *flags)
 	int		len;
 	int		k;
 	
-	if ((NOT_HASH) || ft_atoi(*str) == 0)
+	if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec != 'o' && str[0][0] == '\0'))
 		return ;
+	// else if (flags->spec == 'o' && flags->hash == '1' && flags->is_precision == 1 && str[0][0] == '\0')
+	// 	return ;
 	// printf("SURPRIZE!!! aplied hash\n");
 	tmp = ft_strdup(*str);
 	len = (int)ft_strlen(*str);
@@ -132,7 +141,14 @@ void	ft_aply_width_not_nbr(char **str, t_args *flags)
 	len = (int)ft_strlen(*str);
 	i = -1;
 	tmp = ft_strdup(*str);
-	*str = ft_strnew(flags->width);
+	free(*str);
+	// printf("flags->width bef %d\n", flags->width);
+	if (*tmp == '\0' && flags->spec != 's')
+		*str = ft_strnew(--flags->width);
+	else
+		*str = ft_strnew(flags->width);
+	// printf("flags->width after %d\n", flags->width);
+
 	// printf("flag->width %d\n", flags->width);
 	if (flags->zero == '1' && flags->minus == '0')
 		ft_memset((void*)*str, '0', (size_t)flags->width);
@@ -242,34 +258,44 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	{
 		tmp = ft_strnew(1);
 		if (flags->spec == 'c')
+		{
+			// tmp[0] = (char)va_arg(**param, int);
 			tmp[0] = (char)va_arg(**param, int);
+			if (tmp[0] == 0)
+			{
+				// tmp = ft_strnew(1);
+				tmp[0] = '\0';
+			}
+		}
 		else
 			tmp[0] = flags->hold;
-		if (tmp[0] == (char)NULL)
-		{
-			// write(1, "\0", 1);
-			tmp[0] = '\0';
-			len = 1;
-			// return (len);
-		}
+		// if (tmp[0] == (char)NULL)
+		// {
+		// 	// write(1, "\0", 1);
+		// 	tmp[0] = '\0';
+		// 	len = 1;
+		// 	// return (len);
+		// }
 	}
 	else if (flags->spec == 's')
 	{
-		// printf("       spec is str\n");
-		// if ((char *)va_arg(**param, char*) != NULL) //works only for NULL as an arg
-		// 	tmp = ft_strdup((char *)va_arg(**param, char*));
-		// else
-		// {
-		// 	tmp = ft_strnew(6);
-		// 	tmp = "(null)";
-		// }
+		// printf("bef aloc mem\n");
+		// tmp = ft_strnew(50);
+		// tmp = ft_strdup((char *)va_arg(**param, char*));
 		tmp = ft_strdup((char *)va_arg(**param, char*));
-		// tmp = (char *)va_arg(**param, char*);
+		// printf("after aloc mem\n");
 		if (tmp == NULL)
 		{
 			tmp = ft_strnew(6);
 			tmp = "(null)";
 		}
+		// tmp = ft_strdup((char *)va_arg(**param, char*));
+		// tmp = (char *)va_arg(**param, char*);
+		// if (tmp == NULL)
+		// {
+		// 	tmp = ft_strnew(6);
+		// 	tmp = "(null)";
+		// }
 	}
 	else
 		ft_process_num(&tmp, flags, param);
@@ -319,12 +345,12 @@ int	ft_put_arg(t_args *flags, va_list **param)
 		}
 	}
 	len = (int)ft_strlen(tmp);
-	// if (only_space(tmp))
-	// {
-	// 	write(1, tmp, (len + 1));
-	// 	return (len + 1);
-	// }
-	// else
+	if (only_space(tmp) && flags->spec == 'c')
+	{
+		write(1, tmp, (len + 1));
+		return (len + 1);
+	}
+	else
 		write(1, tmp, len);
 	return (len);
 }

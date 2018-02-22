@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/21 16:59:39 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/22 18:24:36 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ x == 'o' || x == 'O' || x == 'u' || x == 'U' || x == 'x' || x == 'X'
 # define U_NUM(x) x == 'o' || x == 'O' || x == 'x' || x == 'X' || \
 x == 'u' || x == 'U' || x == 'p'
 # define SIGNED_NUM(x) x == 'd' || x == 'i' || x == 'D' || x == 'I'
-# define NOT_HASH flags->hash == '0' || (flags->spec != 'p' && \
-flags->spec != 'o' && flags->spec != 'O' && flags->spec != 'x' && \
-flags->spec != 'X') || (*str[0] == '0' && (flags->spec == 'o' || \
-flags->spec == 'O'))
+# define NOT_HASH (flags->spec != 'p' && flags->spec != 'o' && flags->spec != 'O' && flags->spec != 'x' && \
+flags->spec != 'X') || (*str[0] == '0' && (flags->spec == 'o' || flags->spec == 'O'))
 
 #include <stdarg.h>
 #include <fcntl.h>
@@ -72,7 +70,6 @@ int					ft_put_arg(t_args *flags, va_list **param);
 void				ft_aply_width(char **str, t_args *flags);
 void				ft_aply_width_not_nbr(char **str, t_args *flags);
 void				ft_aply_hash(char **str, t_args *flags);
-void				ft_aply_precision(char **str, t_args *flags);
 long long			ft_aply_size(t_args *flags, va_list *param);
 uintmax_t			ft_aply_size_un(t_args *flags, va_list *param);
 int					ft_printf_exten(const char *format, va_list *param);

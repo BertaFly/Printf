@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:33:29 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/22 15:33:41 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/22 18:53:19 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int ac, char **av)
 	// ft_printf("%s %s\n", NULL, "str");
 	// ft_printf("@moulitest: %c\n", 0);
 	// printf("@moulitest: %c", 0);
-	// ft_printf("%5.2s is a string\n", "this");
+	// ft_printf("%.1s is a string\n", "this");
 	// printf("%5.2s is a string\n\n", "this");
 	// ft_printf("%10s is a string\n", "");
 	// printf("%10s is a string\n\n", "");
@@ -70,6 +70,15 @@ int	main(int ac, char **av)
 	//0172 (int)
 	  // ft_printf("%03.2d\n", -1);
 	  // printf("%03.2d", -1);
+	//95
+	// ft_printf("@moulitest: %#.o %#.0o\n", 0, 0);
+	// printf("@moulitest: %#.o %#.0o", 0, 0);
+	// 0046 (int)
+  	// ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
+  	// printf("@moulitest: %#.x %#.0x", 0, 0);
+  	ft_printf("%10s\n", "");
+  	printf("%10s\n", "");
+
 
 
 // # 0177 (unsigned int)
@@ -88,7 +97,7 @@ int	main(int ac, char **av)
 //   2. (    1) -->0<--
 
 // # 0183 (unsigned int)
-  ft_printf("%15u\n", 4294967295);
+  // ft_printf("%15u\n", 4294967295);
 //   1. (   15) -->    -4294967295<--
 //   2. (   15) -->     4294967295<--
 
