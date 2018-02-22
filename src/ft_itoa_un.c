@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/06 18:44:12 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/07 11:45:54 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/22 15:45:16 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,20 @@ char						*ft_itoa_un(unsigned long long nbr)
 	char		*c;
 
 	len = ft_len(nbr);
-	c = (char *)malloc(sizeof(char) * len + 1);
+	// printf("in itoa len = %lld\n", len);
+	// printf("in itoa nbr = %llu\n", nbr);
+
+	c = (char *)malloc(sizeof(char) * (len + 1));
 	if (!c)
 		return (NULL);
-	c[len] = '\0';
-	len--;
-	while (len >= 0)
+	if (nbr == 0)
+		c[len + 1] = '\0';
+	else
+	{
+		c[len] = '\0';
+		len--;
+	}
+	while (len > -1)
 	{
 		c[len] = '0' + (nbr % 10);
 		nbr = nbr / 10;

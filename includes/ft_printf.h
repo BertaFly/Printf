@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/13 14:49:00 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/21 16:59:39 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ x != 'h' && x != 'l' && x != 'j' && x != 'z'
 x == 'o' || x == 'O' || x == 'u' || x == 'U' || x == 'x' || x == 'X'
 # define U_NUM(x) x == 'o' || x == 'O' || x == 'x' || x == 'X' || \
 x == 'u' || x == 'U' || x == 'p'
+# define SIGNED_NUM(x) x == 'd' || x == 'i' || x == 'D' || x == 'I'
 # define NOT_HASH flags->hash == '0' || (flags->spec != 'p' && \
 flags->spec != 'o' && flags->spec != 'O' && flags->spec != 'x' && \
 flags->spec != 'X') || (*str[0] == '0' && (flags->spec == 'o' || \
