@@ -6,11 +6,12 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:33:29 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/22 18:53:19 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/02/28 18:56:44 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
+#include <locale.h>
 
 int	main(int ac, char **av)
 {
@@ -76,11 +77,28 @@ int	main(int ac, char **av)
 	// 0046 (int)
   	// ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
   	// printf("@moulitest: %#.x %#.0x", 0, 0);
-  	ft_printf("%10s\n", "");
-  	printf("%10s\n", "");
+  	// ft_printf("%10s\n", "");
+  	// printf("%10s\n", "");
+  	setlocale(LC_ALL, "");
+  // 	if (MB_CUR_MAX == 4)
+  // 	{
+  // 		printf("%s\n", "local on");
+  // 	}
+  // 	else
+  // 		printf("%s\n", "local off");
+  // printf("%C\n", 'ç');
+  // ft_printf("%S\n", L"Ω≈ç");
+
+  	// ft_printf("len = %d\n", ft_printf("%C\n", 12215));
+  	// printf("len = %d\n", printf("%C\n", 12215));
+
+  	ft_printf("%C\n", '🚭');
+  	// ft_printf("my %10C\n", L'🙌');
+  	// ft_printf("my %10C\n", L'😀');
 
 
-
+  	//printf("nm %10lc\n", L'ф');
+  	// printf("nm %5.0lc\n", L'¡');
 // # 0177 (unsigned int)
   // ft_printf("%3u\n", 0);
   // printf("%3u", 0);
