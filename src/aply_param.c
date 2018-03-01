@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 12:33:06 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 15:37:09 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,10 @@ void	ft_aply_hash(char **str, t_args *flags)
 	int		k;
 	
 	if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec != 'o' && str[0][0] == '\0'))
-		return ;
+	{
+		if (flags->spec != 'p')
+			return ;
+	}
 	// else if (flags->spec == 'o' && flags->hash == '1' && flags->is_precision == 1 && str[0][0] == '\0')
 	// 	return ;
 	// printf("SURPRIZE!!! aplied hash\n");
@@ -175,7 +178,7 @@ void	ft_aply_width_not_nbr(char **str, t_args *flags)
 		// 	while (flags->width > len)
 		// 		str[0][--flags->width] = tmp[len--];
 		// }
-		// printf("str after aply width %s\n", res);
+		// printf("str after aply width %s\n", str[0]);
 	}
 	free(tmp);
 }
@@ -338,24 +341,34 @@ int	ft_put_uni_char(unsigned int a, char **tmp)
 
 	size_t i = 0;
 	str = va_arg(**param, wchar_t *);
-	while (str[++k])
+	// if (str == NULL)
+	// {
+	// 	str = ft_strdup("(null)");
+	// 	re
+	// }
+	if (str != NULL)
 	{
-		i += sizeof(str[k]);
-		// printf("i = %zu\n", sizeof(str[k]));
-	}
+		while (str[++k])
+		{
+			i += sizeof(str[k]);
+			// printf("i = %zu\n", sizeof(str[k]));
+		}
 
 	// printf("i = %zu\n", i);
 
-	str2 = ft_strnew(i);
-	res = str2;
-	while (*str != '\0')
-	{
-		k = ft_put_uni_char((unsigned int)*str, &str2);
-		str++;
-		str2 = &str2[k];
-		// printf("temporary res: %s\n", res);
-		// printf("now k = %u\n", k);
+		str2 = ft_strnew(i);
+		res = str2;
+		while (*str != '\0')
+		{
+			k = ft_put_uni_char((unsigned int)*str, &str2);
+			str++;
+			str2 = &str2[k];
+			// printf("temporary res: %s\n", res);
+			// printf("now k = %u\n", k);
+		}
 	}
+	else
+		res = ft_strdup("(null)");
 	// printf("str %p\n", str);
 	// printf("str2 %p\n", str2);
 	// free(str);
@@ -372,8 +385,11 @@ int	ft_put_arg(t_args *flags, va_list **param)
 
 	tmp = NULL;
 	len = 0;
+	// printf("flags->spec: %c\n flags->hash: %c\n flags->minus: %c\n flags->plus: %c\n flags->space: %c\n flags->zero: %c\n flags->size: %c\n flags->hold: %c\n flags->width: %d\n flags->is_precision: %d\n flags->precision: %d\n", flags->spec, flags->hash, flags->minus, flags->plus, flags->space, flags->zero, flags->size, flags->hold, flags->width, flags->is_precision, flags->precision);
 	if (flags->spec == 'c' || flags->spec == 'C' || flags->spec == '0')
 	{
+		// printf("flags->spec %c\n", flags->spec);
+
 		if (flags->spec != 'C' && (flags->spec == 'c' && flags->size != '3'))
 		{
 			tmp = ft_strnew(1);
@@ -397,7 +413,11 @@ int	ft_put_arg(t_args *flags, va_list **param)
 			// tmp[0] = ft_put_uni_char(uni_char);
 		}
 		else
+		{
+			tmp = ft_strnew(1);
 			tmp[0] = flags->hold;
+			// printf("tmp: %s\n", tmp);
+		}
 		// if (tmp[0] == (char)NULL)
 		// {
 		// 	// write(1, "\0", 1);
@@ -417,8 +437,9 @@ int	ft_put_arg(t_args *flags, va_list **param)
 		// printf("after aloc mem\n");
 			if (tmp == NULL)
 			{
-				tmp = ft_strnew(6);
-				tmp = "(null)";
+				tmp = ft_strdup("(null)");
+				// tmp[] = "(null)";
+				// printf("tmp %s\n", tmp);
 			}
 		// tmp = ft_strdup((char *)va_arg(**param, char*));
 		// tmp = (char *)va_arg(**param, char*);

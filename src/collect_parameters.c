@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:36:16 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/28 14:58:31 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 15:04:20 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ int			ft_mem_digit(const char *format, int i, t_args *flags)
 	{
 		flags->precision = ft_atoi(&format[1]);
 		flags->is_precision = 1;
-		if (ft_len(flags->precision) == 0)
-			i = i + 1;
-		else
+		// if (ft_len(flags->precision) == 0)
+		// 	i = i + 1;
+		// else
 			i = i + ft_len(flags->precision);
 	}
 	else
@@ -113,11 +113,13 @@ int			ft_parce_flags(const char *format, t_args *flags)
 		else if (SPECS(format[i]))
 		{
 			flags->spec = format[i++];
+			// printf("recorded spec\n");
 			break ;
 		}
 		else if (ERROR(format[i]) && ft_isdigit(format[i]) == 0)
 		{
 			flags->hold = format[i++];
+			// printf("flags->hold = %c\n", flags->hold);
 			break ;
 		}
 		i++;

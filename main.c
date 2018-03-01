@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:33:29 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 12:30:03 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 15:37:45 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int	main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
+	// printf("%");
+	printf("{%S}\n", NULL);
+	ft_printf("{%S}\n", NULL);
+
+
 //	char str[] = "this";
 	// ft_printf("%010x\n", 542);
 	// ft_printf("%#x\n", 0);
@@ -87,9 +92,23 @@ int	main(int ac, char **av)
   // 	else
   // 		printf("%s\n", "local off");
   // printf("%C\n", 'ç');
-  ft_printf("%S\n", L"🙌😀");
-  printf("%S\n", L"🙌😀");
+  // ft_printf("%S\n", L"🙌😀");
+  // printf("%S\n", L"🙌😀");
+  	// ft_printf("%5%\n");
+  	// printf("%5%\n");
+  	// ft_printf("\n");
+  	// ft_printf("%-5%\n");
+  	// printf("%-5%\n");
+// ft_printf("%.0%\n");
+// printf("%.0%\n");
+  	// ft_printf("%   %\n", "test");
+  	// printf("%   %\n", "test");
 
+  	// ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
+  	// printf("@moulitest: %#.x %#.0x\n", 0, 0);
+
+  	// ft_printf("@moulitest: %s\n", NULL);
+  	// printf("@moulitest: %s\n", NULL);
   	// ft_printf("len = %d\n", ft_printf("%C\n", 12215));
   	// printf("len = %d\n", printf("%C\n", 12215));
 

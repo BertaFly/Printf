@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 14:53:10 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/13 16:36:18 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 15:27:03 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ int	ft_printf_exten(const char *format, va_list *param)
 			}
 			else
 			{
+				if (format[++i] == '\0')
+					break ;
 				ft_put_struct(&flags);
-				i++;
+				// i++;
 				// printf("bef parce\n");
 				j = ft_parce_flags(&format[i], &flags);
 				// printf("after parce\n");
