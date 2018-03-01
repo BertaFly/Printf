@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/28 19:06:45 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 12:33:06 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ void	ft_aply_width(char **str, t_args *flags)
 	free(tmp);
 }
 
-unsigned int	ft_put_uni_char(unsigned int a, char **tmp)
+int	ft_put_uni_char(unsigned int a, char **tmp)
 {
 	// unsigned int	new_a;
 	// int	size = sizeof(a);
@@ -331,22 +331,36 @@ unsigned int	ft_put_uni_char(unsigned int a, char **tmp)
 {
 	wchar_t *str;
 	char *str2;
-	unsigned int k = 0;
+	char *res;
+	int k = -1;
 
-	int i = 0;
+	// printf("unicode string in process\n");
+
+	size_t i = 0;
 	str = va_arg(**param, wchar_t *);
-	// str2 = ft_strnew((ft_strlen(str)) * 4);
-	while (str[i])
-		i++;
-	str2 = ft_strnew(i);
-	while (*str2)
+	while (str[++k])
 	{
-		k = ft_put_uni_char((unsigned int)*str, &str2);
-		str = &str[k];
-		str2 = &str2[k];
+		i += sizeof(str[k]);
+		// printf("i = %zu\n", sizeof(str[k]));
 	}
 
-	return (str2);
+	// printf("i = %zu\n", i);
+
+	str2 = ft_strnew(i);
+	res = str2;
+	while (*str != '\0')
+	{
+		k = ft_put_uni_char((unsigned int)*str, &str2);
+		str++;
+		str2 = &str2[k];
+		// printf("temporary res: %s\n", res);
+		// printf("now k = %u\n", k);
+	}
+	// printf("str %p\n", str);
+	// printf("str2 %p\n", str2);
+	// free(str);
+	// printf("ideally res: %s\n", res);
+	return (res);
 }
 
 int	ft_put_arg(t_args *flags, va_list **param)
@@ -472,5 +486,6 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	}
 	else
 		write(1, tmp, len);
+	free(tmp);
 	return (len);
 }
