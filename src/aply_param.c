@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 16:41:00 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 17:03:59 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -407,8 +407,8 @@ int	ft_put_arg(t_args *flags, va_list **param)
 		{
 			// printf("I in right if\n");
 			tmp = ft_strnew(1);
-			if (flags->spec == 'c')
-			{
+			// if (flags->spec == 'c')
+			// {
 			// tmp[0] = (char)va_arg(**param, int);
 				tmp[0] = (char)va_arg(**param, int);
 				if (tmp[0] == 0)
@@ -416,7 +416,7 @@ int	ft_put_arg(t_args *flags, va_list **param)
 					zero_char = 1;
 					// tmp[0] = '\0';
 				}
-			}
+			// }
 		}
 		else if (flags->spec == 'C' || (flags->spec == 'c' && flags->size == '3'))
 		{
