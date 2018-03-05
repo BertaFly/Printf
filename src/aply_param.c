@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 23:32:59 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 13:30:40 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,18 @@ void	ft_aply_precision_str(char **str, t_args *flags)
 	// printf("*****I am aplying precision for str\n");
 	// printf("precision = %d\n", flags->precision);
 	tmp = ft_strdup(*str);
+	// printf("tmp len = %zu\n", ft_strlen(tmp));
 //	printf("tmp: %s\n", tmp);
 	// size_t len = ft_strlen(tmp);
 //	printf("len %zu\n", len);
 //	printf("str: %s\n", *str);
 
 	ft_memset((void*)*str, 0, ft_strlen(tmp));
+	// if (flags->spec == 'S' && flags->is_precision == 1 && flags->precision != 0)
+	// {
+	// 	free(tmp);
+	// 	return ;
+	// }
 	// printf("after bzero\n");
 	k = -1;
 	while (++k < flags->precision)
@@ -44,6 +50,7 @@ void	ft_aply_precision_str(char **str, t_args *flags)
 		// printf("in a while\n");
 		str[0][k] = tmp[k];
 		// printf("str[0][%d] %c\n", k, str[0][k]);
+		// printf("temp ful str %s\n", str[0]);
 	}
 	// printf("->curently str is: %s<-\n", str[0]);
 	free(tmp);
@@ -79,7 +86,7 @@ void	ft_aply_precision_nbr(char **str, t_args *flags)
 	if (((S_10(flags->spec)) || (U_10(flags->spec)) || (U_8(flags->spec)) || (U_16(flags->spec)) || (P(flags->spec))) && flags->is_precision == 1 && flags->precision == 0 && ft_atoi(*str) == 0)
 		str[0][0] = '\0';
 	// printf(">>>>>I am in ft_aply_precision_nbr\n");
-	if (flags->spec == 's' && flags->precision < (int)len)
+	if ((flags->spec == 's' || flags->spec == 'S') && (flags->precision < (int)len || (flags->is_precision == 1 && flags->precision == 0)))
 		ft_aply_precision_str(str, flags);
 }
 
@@ -108,7 +115,8 @@ void	ft_aply_hash(char **str, t_args *flags)
 	int		k;
 	
 	// if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec != 'o' && str[0][0] == '\0'))
-	if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec == 'x' && flags->is_precision == 1 && flags->precision == 0))
+	// if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec == 'x' && flags->is_precision == 1 && flags->precision == 0))
+	if (flags->hash == '0' || (NOT_HASH) || (str[0][0] == '0' && flags->is_precision == 0) || (flags->spec == 'x' && flags->is_precision == 1 && flags->precision == 0))
 	{
 		if (flags->spec != 'p')
 			return ;
@@ -143,12 +151,14 @@ void	ft_aply_width_not_nbr(char **str, t_args *flags)
 	int		i;
 	
 	// printf("----aplying width-----\n");
+	// if (flags->spec == 'S' && flags->is_precision == 1 && flags->precision != 0)
+	// 	return ;
 	len = (int)ft_strlen(*str);
 	i = -1;
 	tmp = ft_strdup(*str);
 	free(*str);
 	// printf("flags->width bef %d\n", flags->width);
-	if (*tmp == '\0' && flags->spec != 's')
+	if (*tmp == '\0' && flags->spec != 's' && flags->spec != 'S')
 		*str = ft_strnew(--flags->width);
 	else
 		*str = ft_strnew(flags->width);

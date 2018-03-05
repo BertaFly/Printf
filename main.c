@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:33:29 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 23:26:51 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 15:47:03 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,19 @@ int	main(int ac, char **av)
 	// printf("col bit = %i\n", ft_printf("%4.8x", 424242424));
 	// printf("col bit = %i\n", printf("%4.8x", 424242424));
 	// ft_printf("{%#.5x}", 1);
-	ft_printf("{%#.5x}", 1);
-	// printf("{%05.S}", L"42 c est cool");
+	// printf("NM func ret: %i\n", printf("%15.4S", L"我是一只猫。"));
+	// ft_printf("%4.1S", L"Jambon");
+	// ft_printf("%.4S", L"我是一只猫。");
+	// ft_printf("%15.4S", L"我是一只猫。");
+	// ft_printf("%hD, %hD", 0, 65535);
+	ft_printf("%hU", 4294967296);
+	// printf("NM func ret: %i\n", printf("%.4S", L"我是一只猫。"));
+	// printf("my func ret: %i\n", ft_printf("%.4S", L"我是一只猫。"));
+	// printf("my func ret: %i\n", ft_printf("%.4S", L"我是一只猫。"));
+	// printf("my func ret: %i\n", printf("{%05.S}", L"42 c est cool"));
+	// printf("my func ret: %i\n", printf("%.4S", L"我是一只猫。"));
+	// printf("NM func ret: %i\n", printf("{%05.S}", L"42 c est cool"));
+		// printf("{%05.S}", L"42 c est cool");
 
 	// printf("%.o, %.0O", 0, 0);
 	// ft_printf("%.o, %.0O", 0, 0);

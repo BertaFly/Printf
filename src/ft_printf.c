@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 14:53:10 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 15:27:03 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 12:54:18 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,11 @@ int	ft_printf_exten(const char *format, va_list *param)
 				i = i + j;
 			}
 		}
-		len = len + count + res;
+		// printf("res = %i\n", res);
+		if (flags.spec == 'S' && flags.is_precision != 0 && res == 0 && count == 0)
+			len = -1;
+		else
+			len = len + count + res;
 	}
 	return (len);
 }
