@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 15:49:21 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/22 15:44:15 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 18:36:54 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ uintmax_t	ft_aply_size_un(t_args *flags, va_list *param)
 	if (flags->spec == 'O' || flags->spec == 'U')
 	{
 		nbr = va_arg(*param, unsigned long int);
-
+		// printf("%li\n", nbr);
 		// nbr = (unsigned long int)nbr;
 		return (nbr);
 	}
@@ -99,9 +99,12 @@ void		ft_process_num(char **tmp, t_args *flags, va_list **param)
 			// printf("passed u_nbr to str %s\n", *tmp);
 		}
 	}
-	if (flags->spec == 'o' || flags->spec == 'O')
+	else if (flags->spec == 'o' || flags->spec == 'O')
+	{
 		*tmp = ft_itoa_base(u_nbr, 8);
-	if (flags->spec == 'x' || flags->spec == 'X' || flags->spec == 'p')
+		// printf("tmp: %s>\n", tmp[0]);
+	}
+	else if (flags->spec == 'x' || flags->spec == 'X' || flags->spec == 'p')
 	{
 		*tmp = ft_itoa_base(u_nbr, 16);
 		if (flags->spec == 'X')

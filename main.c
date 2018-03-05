@@ -6,99 +6,67 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:33:29 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 15:37:45 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 23:26:51 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 #include <locale.h>
+#include <limits.h>
 
 int	main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
 	// printf("%");
-	printf("{%S}\n", NULL);
-	ft_printf("{%S}\n", NULL);
+	// printf("{%S}\n", NULL);
+	// ft_printf("{%S}\n", NULL);
+// 	printf("NM %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c \
+// %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\
+// %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+// ' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-',
+// '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
+// '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+// 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+// 'X', 'Y', 'Z', '[', '\\', ']', '^', '_', '`', 'a', 'b', 'c', 'd', 'e',
+// 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+// 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}');
+// 	ft_printf("MY %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c \
+// %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\
+// %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+// ' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-',
+// '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
+// '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+// 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+// 'X', 'Y', 'Z', '[', '\\', ']', '^', '_', '`', 'a', 'b', 'c', 'd', 'e',
+// 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+// 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}');
+	// ft_printf("%c", 0);
+	// ft_printf("%C", 0);
+	// printf("NM %hD, %hD\n", 0, USHRT_MAX);
+	// ft_printf("MY %hD, %hD\n", 0, USHRT_MAX);
+	// ft_printf("{%3C}", 0);
+	// printf("{%+03d}", 0);
+	// ft_printf("{%+03d}", 0);
+	// printf("{% 03d}", 0);
+	// ft_printf("{% 03d}", 0);
+	// ft_printf("{%03.2d}", 0);
+	// printf("%4.8x\n", 424242424);
+	// printf("col bit = %i\n", ft_printf("%4.8x", 424242424));
+	// printf("col bit = %i\n", printf("%4.8x", 424242424));
+	// ft_printf("{%#.5x}", 1);
+	ft_printf("{%#.5x}", 1);
+	// printf("{%05.S}", L"42 c est cool");
 
+	// printf("%.o, %.0O", 0, 0);
+	// ft_printf("%.o, %.0O", 0, 0);
+
+	// printf("%.i", 99);
+
+	// printf("%c", 0);
+	// ft_printf("%c", ' ');
 
 //	char str[] = "this";
-	// ft_printf("%010x\n", 542);
-	// ft_printf("%#x\n", 0);
-	// ft_printf("%#08x\n", 42);
-	// ft_printf("%#8x\n", 42);
-	// printf("%#8x\n", 42);
-	// ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
-	// printf("@moulitest: %#.x %#.0x\n", 0, 0);
-	// ft_printf("@moulitest: %.x %.0x\n", 0, 0);
-	// printf("@moulitest: %.x %.0x\n", 0, 0);
-	// ft_printf("@moulitest: %5.x %5.0x\n", 0, 0);
-	// printf("@moulitest: %5.x %5.0x\n", 0, 0);
-	 // ft_printf("%.2x\n", 5427);
-	 // printf("%.2x\n", 5427);
-	// ft_printf("%5.2x", 5427);
-	// printf("%5.2x", 5427);
-	// ft_printf("@moulitest: %s\n", NULL);
-	// printf("@moulitest: %s\n", NULL);
-	// ft_printf("%.2c\n", NULL);
-	// ft_printf("%2c\n", 0);
-	// printf("%2c\n", 0);
-	// ft_printf("%.2c\n", 'a');
-	// ft_printf("%s %s\n", NULL, "str");
-	// ft_printf("@moulitest: %c\n", 0);
-	// printf("@moulitest: %c", 0);
-	// ft_printf("%.1s is a string\n", "this");
-	// printf("%5.2s is a string\n\n", "this");
-	// ft_printf("%10s is a string\n", "");
-	// printf("%10s is a string\n\n", "");
-	// ft_printf("%10s is a string\n", "");
-	// printf("%10s is a string\n\n", "");
-	// ft_printf("%-10s is a string\n", "this");
-	// printf("%-10s is a string\n\n", "this");
-	// ft_printf("%-5.2s is a string\n", "this");
-	// printf("%-5.2s is a string\n\n", "this");
-	// ft_printf("%-10s is a string\n", "");
-	// printf("%-10s is a string\n\n", "");
-	// ft_printf("%-5.2s is a string\n", "");
-	// printf("%-5.2s is a string\n\n", "");
-	// ft_printf("@moulitest: %s\n", NULL);
-	// printf("@moulitest: %s", NULL);
-	// ft_printf("% d\n", 42);
-	// printf("% d", 42);
-	// ft_printf("%+d\n", 42);
-	// printf("%+d", 42);
-	// ft_printf("%+d\n", 0);
-	// printf("%+d\n", 0);
-	// ft_printf("%5d\n", -42);
-	// printf("%5d", -42);
-	// ft_printf("@moulitest: %.10d\n", -42);
-	// printf("@moulitest: %.10d", -42);
-	//0172 (int)
-	  // ft_printf("%03.2d\n", -1);
-	  // printf("%03.2d", -1);
-	//95
-	// ft_printf("@moulitest: %#.o %#.0o\n", 0, 0);
-	// printf("@moulitest: %#.o %#.0o", 0, 0);
-	// 0046 (int)
-  	// ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
-  	// printf("@moulitest: %#.x %#.0x", 0, 0);
-  	// ft_printf("%10s\n", "");
-  	// printf("%10s\n", "");
-  	setlocale(LC_ALL, "");
-  // 	if (MB_CUR_MAX == 4)
-  // 	{
-  // 		printf("%s\n", "local on");
-  // 	}
-  // 	else
-  // 		printf("%s\n", "local off");
-  // printf("%C\n", 'ç');
-  // ft_printf("%S\n", L"🙌😀");
-  // printf("%S\n", L"🙌😀");
-  	// ft_printf("%5%\n");
-  	// printf("%5%\n");
-  	// ft_printf("\n");
-  	// ft_printf("%-5%\n");
-  	// printf("%-5%\n");
 // ft_printf("%.0%\n");
 // printf("%.0%\n");
   	// ft_printf("%   %\n", "test");

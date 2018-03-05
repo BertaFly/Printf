@@ -6,22 +6,22 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 15:37:09 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 23:32:59 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-int		only_space(char *str)
-{
-	while (*str)
-	{
-		if (*str != ' ')
-			return (0);
-		str++;
-	}
-	return (1);
-}
+// int		only_space(char *str)
+// {
+// 	while (*str)
+// 	{
+// 		if (*str != ' ')
+// 			return (0);
+// 		str++;
+// 	}
+// 	return (1);
+// }
 
 void	ft_aply_precision_str(char **str, t_args *flags)
 {
@@ -76,7 +76,7 @@ void	ft_aply_precision_nbr(char **str, t_args *flags)
 			str[0][0] = '-';
 		free(tmp);
 	}
-	if ((IS_NUM(flags->spec)) && flags->is_precision == 1 && flags->precision == 0 && ft_atoi(*str) == 0)
+	if (((S_10(flags->spec)) || (U_10(flags->spec)) || (U_8(flags->spec)) || (U_16(flags->spec)) || (P(flags->spec))) && flags->is_precision == 1 && flags->precision == 0 && ft_atoi(*str) == 0)
 		str[0][0] = '\0';
 	// printf(">>>>>I am in ft_aply_precision_nbr\n");
 	if (flags->spec == 's' && flags->precision < (int)len)
@@ -107,7 +107,8 @@ void	ft_aply_hash(char **str, t_args *flags)
 	int		len;
 	int		k;
 	
-	if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec != 'o' && str[0][0] == '\0'))
+	// if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec != 'o' && str[0][0] == '\0'))
+	if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec == 'x' && flags->is_precision == 1 && flags->precision == 0))
 	{
 		if (flags->spec != 'p')
 			return ;
@@ -235,9 +236,9 @@ void	ft_aply_width(char **str, t_args *flags)
 		}
 		if (flags->plus == '1' && flags->zero == '0' && ft_atoi(tmp) > 0 && flags->space == '0')
 			str[0][--flags->width] = '+';
-		if (flags->plus == '1' && flags->zero == '1' && ft_atoi(tmp) > 0)
+		if (flags->plus == '1' && flags->zero == '1' && ft_atoi(tmp) >= 0)
 			str[0][0] = '+';
-		if (flags->plus == '0' && ft_atoi(tmp) > 0 && flags->space == '1')
+		if (flags->plus == '0' && ft_atoi(tmp) >= 0 && flags->space == '1')
 			str[0][0] = ' ';
 		if ((ft_strchr(tmp, 'x') != NULL || ft_strchr(tmp, 'X') != NULL) && flags->zero == '1' && flags->is_precision == 0)
 		{
@@ -382,9 +383,11 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	char			*tmp;
 	char			*tmp2;
 	unsigned int	uni_char;
+	int				zero_char;
 
 	tmp = NULL;
 	len = 0;
+	zero_char = 0;
 	// printf("flags->spec: %c\n flags->hash: %c\n flags->minus: %c\n flags->plus: %c\n flags->space: %c\n flags->zero: %c\n flags->size: %c\n flags->hold: %c\n flags->width: %d\n flags->is_precision: %d\n flags->precision: %d\n", flags->spec, flags->hash, flags->minus, flags->plus, flags->space, flags->zero, flags->size, flags->hold, flags->width, flags->is_precision, flags->precision);
 	if (flags->spec == 'c' || flags->spec == 'C' || flags->spec == '0')
 	{
@@ -399,8 +402,8 @@ int	ft_put_arg(t_args *flags, va_list **param)
 				tmp[0] = (char)va_arg(**param, int);
 				if (tmp[0] == 0)
 				{
-				// tmp = ft_strnew(1);
-					tmp[0] = '\0';
+					zero_char = 1;
+					// tmp[0] = '\0';
 				}
 			}
 		}
@@ -408,7 +411,13 @@ int	ft_put_arg(t_args *flags, va_list **param)
 		{
 			tmp = ft_strnew(4);
 			uni_char = va_arg(**param, unsigned int);
-			ft_put_uni_char(uni_char, &tmp);
+			if (uni_char == 0)
+			{
+				zero_char = 1;
+				tmp[0] = 0;
+			}
+			else
+				ft_put_uni_char(uni_char, &tmp);
 			// printf("len of tmp %zu\n", ft_strlen(tmp));
 			// tmp[0] = ft_put_uni_char(uni_char);
 		}
@@ -466,7 +475,7 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	}
 	else
 	{
-		if ((SIGNED_NUM(flags->spec)) && ft_atoi(tmp) >= 0)
+		if ((S_10(flags->spec)) && ft_atoi(tmp) >= 0)
 		{
 			if (flags->plus == '1')
 			{
@@ -500,7 +509,11 @@ int	ft_put_arg(t_args *flags, va_list **param)
 		}
 	}
 	len = (int)ft_strlen(tmp);
-	if (only_space(tmp) && flags->spec == 'c')
+	// printf("len = %d\n", len);
+	// printf("tmp:%s>", tmp);
+	// write(1, tmp, len);
+	// if (only_space(tmp) && (flags->spec == 'c' || flags->spec == 'C') && tmp[0] != 32)
+	if (zero_char == 1)
 	{
 		write(1, tmp, (len + 1));
 		return (len + 1);

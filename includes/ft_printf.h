@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/22 18:24:36 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/01 19:24:04 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ x != 'h' && x != 'l' && x != 'j' && x != 'z'
 x == 'o' || x == 'O' || x == 'u' || x == 'U' || x == 'x' || x == 'X'
 # define U_NUM(x) x == 'o' || x == 'O' || x == 'x' || x == 'X' || \
 x == 'u' || x == 'U' || x == 'p'
-# define SIGNED_NUM(x) x == 'd' || x == 'i' || x == 'D' || x == 'I'
+# define S_10(x) x == 'd' || x == 'i' || x == 'D' || x == 'I'
+# define U_10(x) x == 'u' || x == 'U'
+# define U_8(x) x == 'o' || x == 'O'
+# define U_16(x) x == 'x' || x == 'X'
+# define P(x) x == 'p'
 # define NOT_HASH (flags->spec != 'p' && flags->spec != 'o' && flags->spec != 'O' && flags->spec != 'x' && \
 flags->spec != 'X') || (*str[0] == '0' && (flags->spec == 'o' || flags->spec == 'O'))
 
