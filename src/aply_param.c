@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 13:30:40 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 16:17:30 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,7 +403,7 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	{
 		// printf("flags->spec %c\n", flags->spec);
 
-		if (flags->spec != 'C' && (flags->spec == 'c' && flags->size != '3'))
+		if ((flags->spec != 'C' || MB_CUR_MAX != 4) && (flags->spec == 'c' && flags->size != '3'))
 		{
 			tmp = ft_strnew(1);
 			if (flags->spec == 'c')
