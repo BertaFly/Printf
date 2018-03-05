@@ -6,136 +6,89 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 17:03:59 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 21:43:27 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-// int		only_space(char *str)
-// {
-// 	while (*str)
-// 	{
-// 		if (*str != ' ')
-// 			return (0);
-// 		str++;
-// 	}
-// 	return (1);
-// }
-
-void	ft_aply_precision_str(char **str, t_args *flags)
+void	aply_precision_str(char **str, t_args *fl)
 {
-	char	*tmp;
-	int		k;
+	char			*tmp;
+	int				k;
 
-	// printf("*****I am aplying precision for str\n");
-	// printf("precision = %d\n", flags->precision);
 	tmp = ft_strdup(*str);
-	// printf("tmp len = %zu\n", ft_strlen(tmp));
-//	printf("tmp: %s\n", tmp);
-	// size_t len = ft_strlen(tmp);
-//	printf("len %zu\n", len);
-//	printf("str: %s\n", *str);
-
 	ft_memset((void*)*str, 0, ft_strlen(tmp));
-	// if (flags->spec == 'S' && flags->is_precision == 1 && flags->precision != 0)
-	// {
-	// 	free(tmp);
-	// 	return ;
-	// }
-	// printf("after bzero\n");
 	k = -1;
-	while (++k < flags->precision)
-	{
-		// printf("in a while\n");
+	while (++k < fl->prc)
 		str[0][k] = tmp[k];
-		// printf("str[0][%d] %c\n", k, str[0][k]);
-		// printf("temp ful str %s\n", str[0]);
-	}
-	// printf("->curently str is: %s<-\n", str[0]);
 	free(tmp);
 }
 
-void	ft_aply_precision_nbr(char **str, t_args *flags)
+void	aply_precision_nbr(char **str, t_args *fl, int len)
 {
-	char	*tmp;
-	size_t	len;
-	int		k;
-	
-	k = flags->precision;
-	len = ft_strlen(*str);
-	if ((IS_NUM(flags->spec)) && ((int)len < flags->precision || ((int)len == flags->precision && ft_atoi(*str) < 0)))
+	char			*tmp;
+	int				k;
+
+	k = fl->prc;
+	if ((IS_NUM(fl->spec)) && len <= fl->prc)
 	{
-		// printf("SURPRIZE\n");
 		tmp = ft_strdup(*str);
 		free(*str);
-		if (ft_atoi(tmp) < 0)
-			k++;
+		ft_atoi(tmp) < 0 ? k++ : k;
 		str[0] = ft_strnew(k);
+		ft_memset(str[0], '0', (size_t)k);
 		while (len > 0 && tmp[len - 1] != '-')
 		{
 			str[0][--k] = tmp[len - 1];
 			len--;
 		}
-		while (--k >= 0)
-			str[0][k] = '0';
 		if (ft_atoi(tmp) < 0)
 			str[0][0] = '-';
 		free(tmp);
 	}
-	if (((S_10(flags->spec)) || (U_10(flags->spec)) || (U_8(flags->spec)) || (U_16(flags->spec)) || (P(flags->spec))) && flags->is_precision == 1 && flags->precision == 0 && ft_atoi(*str) == 0)
+	if ((IS_NUM(fl->spec)) && (WIPE_PRC) && ft_atoi(*str) == 0)
 		str[0][0] = '\0';
-	// printf(">>>>>I am in ft_aply_precision_nbr\n");
-	if ((flags->spec == 's' || flags->spec == 'S') && (flags->precision < (int)len || (flags->is_precision == 1 && flags->precision == 0)))
-		ft_aply_precision_str(str, flags);
+	if ((S(fl->spec)) && (fl->prc < len || (WIPE_PRC)))
+		aply_precision_str(str, fl);
 }
 
-void	ft_aply_hash_2(char *tmp, int len, char **str)
+void	aply_hash_2(char *tmp, int len, char **str)
 {
-	int		k;
+	int				k;
 
 	k = len + 1;
 	*str = ft_strnew(k);
-	// printf("aply hash 2\n");
 	while (len >= 0)
 	{
 		str[0][k] = tmp[len];
-		// printf("in str - %c\n", str[0][k]);
 		len--;
 		k--;
 	}
 	str[0][k] = '0';
-	// printf("str full %s\n", str[0]);
 }
 
-void	ft_aply_hash(char **str, t_args *flags)
+void	aply_hash(char **str, t_args *fl)
 {
-	char	*tmp;
-	int		len;
-	int		k;
-	
-	// if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec != 'o' && str[0][0] == '\0'))
-	// if (flags->hash == '0' || (NOT_HASH) || str[0][0] == '0' || (flags->spec == 'x' && flags->is_precision == 1 && flags->precision == 0))
-	if (flags->hash == '0' || (NOT_HASH) || (str[0][0] == '0' && flags->is_precision == 0) || (flags->spec == 'x' && flags->is_precision == 1 && flags->precision == 0))
-	{
-		if (flags->spec != 'p')
-			return ;
-	}
-	// else if (flags->spec == 'o' && flags->hash == '1' && flags->is_precision == 1 && str[0][0] == '\0')
-	// 	return ;
-	// printf("SURPRIZE!!! aplied hash\n");
+	char			*tmp;
+	int				len;
+	int				k;
+
+	if ((fl->hash == '0' || (NOT_HASH) || (HASH_X0) || \
+		(fl->spec == 'x' && (WIPE_PRC))) && !(P(fl->spec)))
+		return ;
 	tmp = ft_strdup(*str);
 	len = (int)ft_strlen(*str);
 	free(*str);
-	if (flags->spec == 'o' || flags->spec == 'O')
-		ft_aply_hash_2(tmp, len, str);
-	if (flags->spec == 'x' || flags->spec == 'X' || flags->spec == 'p')
+	if (fl->spec == 'o' || fl->spec == 'O')
+		aply_hash_2(tmp, len, str);
+	if (fl->spec == 'x' || fl->spec == 'X' || fl->spec == 'p')
 	{
 		k = len + 2;
 		*str = ft_strnew(k);
 		while (--len > -1)
 			str[0][--k] = tmp[len];
-		if (flags->spec == 'X')
+		if (fl->spec == 'X')
 			str[0][1] = 'X';
 		else
 			str[0][1] = 'x';
@@ -144,85 +97,59 @@ void	ft_aply_hash(char **str, t_args *flags)
 	free(tmp);
 }
 
-void	ft_aply_width_not_nbr(char **str, t_args *flags)
+void	aply_width_not_nbr(char **str, t_args *fl, int len)
 {
-	char	*tmp;
-	int		len;
-	int		i;
-	
-	// printf("----aplying width-----\n");
-	// if (flags->spec == 'S' && flags->is_precision == 1 && flags->precision != 0)
-	// 	return ;
-	len = (int)ft_strlen(*str);
+	char			*tmp;
+	int				i;
+
 	i = -1;
 	tmp = ft_strdup(*str);
 	free(*str);
-	// printf("flags->width bef %d\n", flags->width);
-	if (*tmp == '\0' && flags->spec != 's' && flags->spec != 'S')
-		*str = ft_strnew(--flags->width);
+	if (*tmp == '\0' && fl->spec != 's' && fl->spec != 'S')
+		*str = ft_strnew(--fl->width);
 	else
-		*str = ft_strnew(flags->width);
-	// printf("flags->width after %d\n", flags->width);
-
-	// printf("flag->width %d\n", flags->width);
-	if (flags->zero == '1' && flags->minus == '0')
-		ft_memset((void*)*str, '0', (size_t)flags->width);
+		*str = ft_strnew(fl->width);
+	if (fl->zero == '1' && fl->minus == '0')
+		ft_memset((void*)*str, '0', (size_t)fl->width);
 	else
-		ft_memset((void*)*str, ' ', (size_t)flags->width);
-	if (flags->minus == '1')
+		ft_memset((void*)*str, ' ', (size_t)fl->width);
+	if (fl->minus == '1')
 	{
 		while (++i < len)
 			str[0][i] = tmp[i];
 	}
 	else
 	{
-		// if (len != 0)
-		{
-			while (--len > -1)
-			{
-				str[0][--flags->width] = tmp[len];
-				// len--;
-			}
-		}
-		// else
-		// {
-		// 	while (flags->width > len)
-		// 		str[0][--flags->width] = tmp[len--];
-		// }
-		// printf("str after aply width %s\n", str[0]);
+		while (--len > -1)
+			str[0][--fl->width] = tmp[len];
 	}
 	free(tmp);
 }
 
-void	ft_aply_width(char **str, t_args *flags)
+void	aply_width(char **str, t_args *fl)
 {
-	char	*tmp;
-	int		len;
-	int		i;
-	int		k;
-	int		exec_flg_0;
-	
-	// printf("aply WIDTH\n");
+	char			*tmp;
+	int				len;
+	int				i;
+	int				k;
+	int				apl_fl0;
 
 	len = (int)ft_strlen(*str);
 	i = -1;
 	k = -1;
-	exec_flg_0 = 0;
 	tmp = ft_strdup(*str);
 	free(*str);
-	*str = ft_strnew(flags->width);
-	if (flags->zero == '1' && flags->minus == '0' && flags->is_precision == 0)
-	{
-		ft_memset((void*)*str, '0', (size_t)flags->width);
-		exec_flg_0 = 1;
-	}
+	*str = ft_strnew(fl->width);
+	if (fl->zero == '1' && fl->minus == '0' && fl->is_prc == 0)
+		ft_memset((void*)*str, '0', (size_t)fl->width);
 	else
-		ft_memset((void*)*str, ' ', (size_t)flags->width);
-	if (flags->minus == '1')
+		ft_memset((void*)*str, ' ', (size_t)fl->width);
+	apl_fl0 = (str[0][0] == '0' ? 1 : 0);
+	if (fl->minus == '1')
 	{
-		if (flags->plus == '1' && ft_atoi(tmp) > 0)
+		if (fl->plus == '1' && ft_atoi(tmp) > 0)
 			str[0][++i] = '+';
-		if (flags->plus == '0' && flags->space == '1' && ft_atoi(tmp) > 0)
+		else if (fl->space == '1' && ft_atoi(tmp) > 0)
 			str[0][++i] = ' ';
 		while (++k < len)
 			str[0][++i] = tmp[k];
@@ -231,88 +158,68 @@ void	ft_aply_width(char **str, t_args *flags)
 	{
 		while (--len > -1 && tmp[len] != '-')
 		{
-			if ((tmp[len] == 'x' || tmp[len] == 'X') && flags->zero == '1' && flags->is_precision == 0)
+			if ((tmp[len] == 'x' || tmp[len] == 'X') && apl_fl0 == 1)
 				break ;
-			str[0][--flags->width] = tmp[len];
+			str[0][--fl->width] = tmp[len];
 		}
-		if (ft_atoi(tmp) < 0 && exec_flg_0 == 1 && !(U_NUM(flags->spec)))
+		if (ft_atoi(tmp) < 0 && apl_fl0 == 1 && !(U_NUM(fl->spec)))
 			str[0][0] = '-';
-		else if (ft_atoi(tmp) < 0 && exec_flg_0 == 0 && !(U_NUM(flags->spec)))
-		{
-			// printf("tmp: %s\n", tmp);
-			// printf("atoi returns %d\n", ft_atoi(tmp));
-			str[0][--flags->width] = '-';
-			// printf("SURPRIZE mathafaka\n");
-		}
-		if (flags->plus == '1' && flags->zero == '0' && ft_atoi(tmp) > 0 && flags->space == '0')
-			str[0][--flags->width] = '+';
-		if (flags->plus == '1' && flags->zero == '1' && ft_atoi(tmp) >= 0)
+		else if (ft_atoi(tmp) < 0 && apl_fl0 == 0 && !(U_NUM(fl->spec)))
+			str[0][--fl->width] = '-';
+		if (fl->plus == '1' && fl->zero == '1' && ft_atoi(tmp) >= 0)
 			str[0][0] = '+';
-		if (flags->plus == '0' && ft_atoi(tmp) >= 0 && flags->space == '1')
+		else if (fl->plus == '1' && ft_atoi(tmp) > 0 && fl->space == '0')
+			str[0][--fl->width] = '+';
+		if (fl->plus == '0' && ft_atoi(tmp) >= 0 && fl->space == '1')
 			str[0][0] = ' ';
-		if ((ft_strchr(tmp, 'x') != NULL || ft_strchr(tmp, 'X') != NULL) && flags->zero == '1' && flags->is_precision == 0)
-		{
-			if (ft_strchr(tmp, 'X') != NULL)
-				str[0][1] = 'X';
-			else
-				str[0][1] = 'x';
-		}
+		if ((SAVE_0X) && apl_fl0 == 1)
+			str[0][1] = (ft_strchr(tmp, 'X') == NULL ? 'x' : 'X');
 	}
 	free(tmp);
 }
 
-int	ft_put_uni_char(unsigned int a, char **tmp)
+int		put_uni_char(unsigned int a, char **tmp)
 {
-	// unsigned int	new_a;
-	// int	size = sizeof(a);
 	unsigned char	octet;
 	unsigned char	o2;
 	unsigned char	o1;
 	unsigned char	o3;
 	unsigned char	o4;
-	// unsigned int	mask0 = 0;
-	unsigned int	mask1 = 49280;
-	unsigned int	mask2 = 14712960;
-	unsigned int	mask3 = 4034953344;
+	unsigned int	mask1;
+	unsigned int	mask2;
+	unsigned int	mask3;
 
-
+	mask1 = 49280;
+	mask2 = 14712960;
+	mask3 = 4034953344;
 	if (a <= 127)
 	{
 		octet = a;
 		tmp[0][0] = octet;
-		// write(1, &octet, 1);
 		return (1);
 	}
 	else if (a <= 2047)
-	// else if (a <= 57279)
 	{
 		o2 = (a << 26) >> 26;
 		o1 = ((a >> 6) << 27) >> 27;
 		octet = (mask1 >> 8) | o1;
 		tmp[0][0] = octet;
-		// write(1, &octet, 1);
 		octet = ((mask1 << 24) >> 24) | o2;
 		tmp[0][1] = octet;
-		// write(1, &octet, 1);
 		return (2);
 	}
 	else if (a <= 65535)
-	// else if (a <= 15712191)
 	{
 		o3 = (a << 26) >> 26;
 		o2 = ((a >> 6) << 26) >> 26;
 		o1 = ((a >> 12) << 28) >> 28;
 		octet = (mask2 >> 16) | o1;
 		tmp[0][0] = octet;
-				// write(1, &octet, 1);
-		octet = ((mask2<< 16) >> 24) | o2;
+		octet = ((mask2 << 16) >> 24) | o2;
 		tmp[0][1] = octet;
-
-		// write(1, &octet, 1);
 		octet = ((mask2 << 24) >> 24) | o3;
 		tmp[0][2] = octet;
 		return (3);
-		// write(1, &octet, 1);
 	}
 	else
 	{
@@ -322,72 +229,46 @@ int	ft_put_uni_char(unsigned int a, char **tmp)
 		o1 = ((a >> 18) << 29) >> 29;
 		octet = (mask3 >> 24) | o1;
 		tmp[0][0] = octet;
-
-		// write(1, &octet, 1);
 		octet = ((mask3 << 8) >> 24) | o2;
 		tmp[0][1] = octet;
-
-		// write(1, &octet, 1);
 		octet = ((mask3 << 16) >> 24) | o3;
 		tmp[0][2] = octet;
-
-		// write(1, &octet, 1);
 		octet = ((mask3 << 24) >> 24) | o4;
 		tmp[0][3] = octet;
-
-		// write(1, &octet, 1);
 	}
 	return (4);
-	// return (new_a);
 }
 
- char	*ft_put_uni_str(va_list **param)
+char	*put_uni_str(va_list **param)
 {
-	wchar_t *str;
-	char *str2;
-	char *res;
-	int k = -1;
+	wchar_t			*str;
+	char			*str2;
+	char			*res;
+	int				k;
+	size_t			i;
 
-	// printf("unicode string in process\n");
-
-	size_t i = 0;
+	k = -1;
+	i = 0;
 	str = va_arg(**param, wchar_t *);
-	// if (str == NULL)
-	// {
-	// 	str = ft_strdup("(null)");
-	// 	re
-	// }
 	if (str != NULL)
 	{
 		while (str[++k])
-		{
 			i += sizeof(str[k]);
-			// printf("i = %zu\n", sizeof(str[k]));
-		}
-
-	// printf("i = %zu\n", i);
-
 		str2 = ft_strnew(i);
 		res = str2;
 		while (*str != '\0')
 		{
-			k = ft_put_uni_char((unsigned int)*str, &str2);
+			k = put_uni_char((unsigned int)*str, &str2);
 			str++;
 			str2 = &str2[k];
-			// printf("temporary res: %s\n", res);
-			// printf("now k = %u\n", k);
 		}
 	}
 	else
 		res = ft_strdup("(null)");
-	// printf("str %p\n", str);
-	// printf("str2 %p\n", str2);
-	// free(str);
-	// printf("ideally res: %s\n", res);
 	return (res);
 }
 
-int	ft_put_arg(t_args *flags, va_list **param)
+int		put_arg(t_args *fl, va_list **param)
 {
 	int				len;
 	char			*tmp;
@@ -398,27 +279,16 @@ int	ft_put_arg(t_args *flags, va_list **param)
 	tmp = NULL;
 	len = 0;
 	zero_char = 0;
-	// printf("flags->spec: %c\n flags->hash: %c\n flags->minus: %c\n flags->plus: %c\n flags->space: %c\n flags->zero: %c\n flags->size: %c\n flags->hold: %c\n flags->width: %d\n flags->is_precision: %d\n flags->precision: %d\n", flags->spec, flags->hash, flags->minus, flags->plus, flags->space, flags->zero, flags->size, flags->hold, flags->width, flags->is_precision, flags->precision);
-	if (flags->spec == 'c' || flags->spec == 'C' || flags->spec == '0')
+	if (fl->spec == 'c' || fl->spec == 'C' || fl->spec == '0')
 	{
-		// printf("flags->spec %c\n", flags->spec);
-
-		if ((flags->spec == 'C' && MB_CUR_MAX == 1) || (flags->spec == 'c' && flags->size != '3'))
+		if ((fl->spec == 'C' && MB_CUR_MAX == 1) || (fl->spec == 'c' && fl->size != '3'))
 		{
-			// printf("I in right if\n");
 			tmp = ft_strnew(1);
-			// if (flags->spec == 'c')
-			// {
-			// tmp[0] = (char)va_arg(**param, int);
-				tmp[0] = (char)va_arg(**param, int);
-				if (tmp[0] == 0)
-				{
-					zero_char = 1;
-					// tmp[0] = '\0';
-				}
-			// }
+			tmp[0] = (char)va_arg(**param, int);
+			if (tmp[0] == 0)
+				zero_char = 1;
 		}
-		else if (flags->spec == 'C' || (flags->spec == 'c' && flags->size == '3'))
+		else if (fl->spec == 'C' || (fl->spec == 'c' && fl->size == '3'))
 		{
 			tmp = ft_strnew(4);
 			uni_char = va_arg(**param, unsigned int);
@@ -428,69 +298,43 @@ int	ft_put_arg(t_args *flags, va_list **param)
 				tmp[0] = 0;
 			}
 			else
-				ft_put_uni_char(uni_char, &tmp);
-			// printf("len of tmp %zu\n", ft_strlen(tmp));
-			// tmp[0] = ft_put_uni_char(uni_char);
+				put_uni_char(uni_char, &tmp);
 		}
 		else
 		{
 			tmp = ft_strnew(1);
-			tmp[0] = flags->hold;
-			// printf("tmp: %s\n", tmp);
+			tmp[0] = fl->hold;
 		}
-		// if (tmp[0] == (char)NULL)
-		// {
-		// 	// write(1, "\0", 1);
-		// 	tmp[0] = '\0';
-		// 	len = 1;
-		// 	// return (len);
-		// }
 	}
-	else if (flags->spec == 's' || flags->spec == 'S')
+	else if (fl->spec == 's' || fl->spec == 'S')
 	{
-		if ((flags->spec == 'S' && MB_CUR_MAX == 1) || (flags->spec == 's' && flags->size != '3'))
+		if ((fl->spec == 'S' && MB_CUR_MAX == 1) || (fl->spec == 's' && fl->size != '3'))
 		{
-		// printf("bef aloc mem\n");
-		// tmp = ft_strnew(50);
-		// tmp = ft_strdup((char *)va_arg(**param, char*));
 			tmp = ft_strdup((char *)va_arg(**param, char*));
-		// printf("after aloc mem\n");
 			if (tmp == NULL)
-			{
 				tmp = ft_strdup("(null)");
-				// tmp[] = "(null)";
-				// printf("tmp %s\n", tmp);
-			}
-		// tmp = ft_strdup((char *)va_arg(**param, char*));
-		// tmp = (char *)va_arg(**param, char*);
-		// if (tmp == NULL)
-		// {
-		// 	tmp = ft_strnew(6);
-		// 	tmp = "(null)";
-		// }
 		}
 		else
-			tmp = ft_put_uni_str(param);
+			tmp = put_uni_str(param);
 	}
 	else
-		ft_process_num(&tmp, flags, param);
-	if (flags->is_precision == 1)
-		ft_aply_precision_nbr(&tmp, flags);
-	ft_aply_hash(&tmp, flags);
-	if (flags->width > (int)ft_strlen(tmp))
+		process_num(&tmp, fl, param);
+	if (fl->is_prc == 1)
+		aply_precision_nbr(&tmp, fl, (int)ft_strlen(tmp));
+	aply_hash(&tmp, fl);
+	if (fl->width > (int)ft_strlen(tmp))
 	{
-		if (!(IS_NUM(flags->spec)))
-			ft_aply_width_not_nbr(&tmp, flags);
+		if (!(IS_NUM(fl->spec)))
+			aply_width_not_nbr(&tmp, fl, (int)ft_strlen(tmp));
 		else
-			ft_aply_width(&tmp, flags);
+			aply_width(&tmp, fl);
 	}
 	else
 	{
-		if ((S_10(flags->spec)) && ft_atoi(tmp) >= 0)
+		if ((S_10(fl->spec)) && ft_atoi(tmp) >= 0)
 		{
-			if (flags->plus == '1')
+			if (fl->plus == '1')
 			{
-				// printf("TUT\n");
 				tmp2 = ft_strdup(tmp);
 				free(tmp);
 				len = ft_strlen(tmp2);
@@ -503,7 +347,7 @@ int	ft_put_arg(t_args *flags, va_list **param)
 				tmp[len] = '+';
 				free(tmp2);
 			}
-			if (flags->space == '1' && flags->plus == '0')
+			if (fl->space == '1' && fl->plus == '0')
 			{
 				tmp2 = ft_strdup(tmp);
 				free(tmp);
@@ -520,17 +364,9 @@ int	ft_put_arg(t_args *flags, va_list **param)
 		}
 	}
 	len = (int)ft_strlen(tmp);
-	// printf("len = %d\n", len);
-	// printf("tmp:%s>", tmp);
-	// write(1, tmp, len);
-	// if (only_space(tmp) && (flags->spec == 'c' || flags->spec == 'C') && tmp[0] != 32)
 	if (zero_char == 1)
-	{
-		write(1, tmp, (len + 1));
-		return (len + 1);
-	}
-	else
-		write(1, tmp, len);
+		len = len + 1;
+	write(1, tmp, len);
 	free(tmp);
 	return (len);
 }

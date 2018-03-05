@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/02 12:59:15 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/02 17:34:57 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 21:28:37 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static long long	ft_abs(long long nbr)
 
 static long long	ft_len(long long nbr)
 {
-	int		len;
+	int			len;
 
 	len = (nbr <= 0) ? 1 : 0;
 	while (nbr != 0)
@@ -32,8 +32,8 @@ static long long	ft_len(long long nbr)
 
 char				*ft_itoa(long long nbr)
 {
-	long long			len;
-	long long			sign;
+	long long	len;
+	long long	sign;
 	char		*c;
 
 	sign = (nbr < 0) ? -1 : 1;

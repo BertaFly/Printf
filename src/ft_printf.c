@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 14:53:10 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 12:54:18 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 21:31:50 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_printf_exten(const char *format, va_list *param)
 {
-	t_args	flags;
+	t_args	fl;
 	int		i;
 	int		j;
 	int		count;
@@ -25,14 +25,12 @@ int	ft_printf_exten(const char *format, va_list *param)
 	i = 0;
 	while (format[i] != '\0')
 	{
-		// printf("at the begining of printf\n");
 		count = 0;
 		res = 0;
-		while(format[i] != '%' && format[i] != '\0')
+		while (format[i] != '%' && format[i] != '\0')
 		{
 			write(1, &format[i++], 1);
 			count++;
-			// printf("put everything exepf after %%\n");
 		}
 		if (format[i] == '%')
 		{
@@ -46,18 +44,13 @@ int	ft_printf_exten(const char *format, va_list *param)
 			{
 				if (format[++i] == '\0')
 					break ;
-				ft_put_struct(&flags);
-				// i++;
-				// printf("bef parce\n");
-				j = ft_parce_flags(&format[i], &flags);
-				// printf("after parce\n");
-				res = ft_put_arg(&flags, &param);
-				// printf("apperently I use all parameters %%\n");
+				put_struct(&fl);
+				j = parce_flg(&format[i], &fl);
+				res = put_arg(&fl, &param);
 				i = i + j;
 			}
 		}
-		// printf("res = %i\n", res);
-		if (flags.spec == 'S' && flags.is_precision != 0 && res == 0 && count == 0)
+		if (fl.spec == 'S' && fl.is_prc != 0 && res == 0 && count == 0)
 			len = -1;
 		else
 			len = len + count + res;
@@ -69,14 +62,14 @@ int	ft_printf(const char *format, ...)
 {
 	va_list	param;
 	int		len;
-	
+
 	len = 0;
 	if (format == NULL)
 		return (-1);
 	if (ft_strchr(format, '%') == 0)
-		return((int)write(1, format, ft_strlen(format)));
+		return ((int)write(1, format, ft_strlen(format)));
 	va_start(param, format);
 	len = ft_printf_exten(format, &param);
 	va_end(param);
-	return(len);
+	return (len);
 }

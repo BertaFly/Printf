@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:36:16 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/01 15:04:20 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/05 21:33:20 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	ft_len(int nbr)
 {
 	int	len;
-	
+
 	len = 0;
 	while (nbr != 0)
 	{
@@ -25,101 +25,95 @@ static int	ft_len(int nbr)
 	return (len);
 }
 
-void		ft_put_struct(t_args *param)
+void		put_struct(t_args *param)
 {
 	param->minus = '0';
 	param->plus = '0';
 	param->space = '0';
 	param->hash = '0';
 	param->zero = '0';
-	param->star = '0';
 	param->width = 0;
-	param->is_precision = 0;
-	param->precision = 0;
+	param->is_prc = 0;
+	param->prc = 0;
 	param->size = '0';
 	param->spec = '0';
 	param->hold = '0';
 }
 
-void		ft_mem_flg(const char *format, t_args *flags)
+void		mem_flg(const char *format, t_args *fl)
 {
 	if (*format == '+')
-		flags->plus = '1';
+		fl->plus = '1';
 	if (*format == '-')
-		flags->minus = '1';
+		fl->minus = '1';
 	if (*format == ' ')
-		flags->space = '1';
+		fl->space = '1';
 	if (*format == '0')
-		flags->zero = '1';
+		fl->zero = '1';
 	if (*format == '#')
-		flags->hash = '1';
+		fl->hash = '1';
 }
 
-int			ft_mem_size(const char *format, int i, t_args *flags)
+int			mem_size(const char *format, int i, t_args *fl)
 {
 	if (format[i] == 'h' && format[i + 1] == 'h')
 	{
 		i++;
-		flags->size = '1';
+		fl->size = '1';
 	}
-	else if (format[i] == 'h')
-		flags->size = '2';
+	else if (format[i] == 'h' && format[i + 1] != 'h')
+		fl->size = '2';
 	else if (format[i] == 'l' && format[i + 1] != 'l')
-		flags->size = '3';
+		fl->size = '3';
 	else if (format[i] == 'l' && format[i + 1] == 'l')
 	{
 		i++;
-		flags->size = '4';
+		fl->size = '4';
 	}
 	else if (format[i] == 'j')
-		flags->size = '5';
+		fl->size = '5';
 	else
-		flags->size = '6';
+		fl->size = '6';
 	return (i);
 }
 
-int			ft_mem_digit(const char *format, int i, t_args *flags)
+int			mem_digit(const char *format, int i, t_args *fl)
 {
 	if (*format == '.')
 	{
-		flags->precision = ft_atoi(&format[1]);
-		flags->is_precision = 1;
-		// if (ft_len(flags->precision) == 0)
-		// 	i = i + 1;
-		// else
-			i = i + ft_len(flags->precision);
+		fl->prc = ft_atoi(&format[1]);
+		fl->is_prc = 1;
+		i = i + ft_len(fl->prc);
 	}
 	else
 	{
-		flags->width = ft_atoi(format);
-		i = i + ft_len(flags->width) - 1;
+		fl->width = ft_atoi(format);
+		i = i + ft_len(fl->width) - 1;
 	}
 	return (i);
 }
 
-int			ft_parce_flags(const char *format, t_args *flags)
+int			parce_flg(const char *format, t_args *fl)
 {
 	int	i;
-	
+
 	i = 0;
 	while (format[i] != '\0')
 	{
 		if (FLG(format[i]))
-			ft_mem_flg(&format[i], flags);
+			mem_flg(&format[i], fl);
 		else if (ft_isdigit(format[i]) || format[i] == '.')
-			i = ft_mem_digit(&format[i], i, flags);
+			i = mem_digit(&format[i], i, fl);
 		else if (SIZE(format[i]))
-			i = ft_mem_size(format, i, flags);
+			i = mem_size(format, i, fl);
 		else if (SPECS(format[i]))
 		{
-			flags->spec = format[i++];
-			// printf("recorded spec\n");
+			fl->spec = format[i++];
 			break ;
 		}
-		else if (ERROR(format[i]) && ft_isdigit(format[i]) == 0)
+		else if ((ERROR(format[i])) && ft_isdigit(format[i]) == 0)
 		{
-			flags->hold = format[i++];
-			// printf("flags->hold = %c\n", flags->hold);
+			fl->hold = format[i++];
 			break ;
 		}
 		i++;
