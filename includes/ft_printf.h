@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 19:52:53 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 21:19:55 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # define NOT_HASH ((!(U_8(fl->spec)) && !(U_16(fl->spec))) || (N_HASH2))
 # define N_HASH2 (*str[0] == '0' && (U_8(fl->spec)))
 # define RET_ER (fl.spec == 'S' && fl.is_prc != 0 && res == 0 && count == 0)
+# define SMAL_S (fl->spec == 's' && fl->size != 3)
+# define SMAL_C (fl->spec == 'c' && fl->size != 3)
 # include <stdarg.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -64,13 +66,20 @@ int					mem_size(const char *format, int i, t_args *fl);
 int					mem_digit(const char *format, int i, t_args *fl);
 int					parce_flg(const char *format, t_args *fl);
 void				process_num(char **tmp, t_args *fl, va_list **param);
+int					put_uni_char(unsigned int a, char **tmp);
+void				extract_char(t_args *fl, va_list **param, char **tmp, int *zero_char);
+void				extract_arg(t_args *fl, va_list **param, char **tmp, int *zero_char);
+char				*put_uni_str(va_list **param);
+void				aply_precision(char **str, t_args *fl, int len);
 void				aply_precision_str(char **str, t_args *fl);
 void				aply_precision_nbr(char **str, t_args *fl, int len);
 void				aply_hash_2(char *tmp, int len, char **str);
 void				aply_hash(char **str, t_args *fl);
+void				aply_flg(t_args *fl, char **tmp, int len);
 int					put_arg(t_args *fl, va_list **param);
 void				aply_width(char **str, t_args *fl, int len);
-void				aply_width_not_nbr(char **str, t_args *fl, int len);
+void				aply_width_nbr(char **str, t_args *fl, int len);
+void				aply_width_symb(char **str, t_args *fl, int len);
 void				aply_hash(char **str, t_args *fl);
 long long			aply_size(t_args *fl, va_list *param);
 uintmax_t			aply_size_un(t_args *fl, va_list *param);

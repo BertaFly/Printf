@@ -6,39 +6,11 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 15:49:21 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 13:53:30 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 20:45:03 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
-
-void		aply_precision_nbr(char **str, t_args *fl, int len)
-{
-	char		*tmp;
-	int			k;
-
-	k = fl->prc;
-	if ((IS_NUM(fl->spec)) && len <= fl->prc)
-	{
-		tmp = ft_strdup(*str);
-		free(*str);
-		ft_atoi(tmp) < 0 ? k++ : k;
-		str[0] = ft_strnew(k);
-		ft_memset(str[0], '0', (size_t)k);
-		while (len > 0 && tmp[len - 1] != '-')
-		{
-			str[0][--k] = tmp[len - 1];
-			len--;
-		}
-		if (ft_atoi(tmp) < 0)
-			str[0][0] = '-';
-		free(tmp);
-	}
-	if ((IS_NUM(fl->spec)) && (WIPE_PRC) && ft_atoi(*str) == 0)
-		str[0][0] = '\0';
-	if ((S(fl->spec)) && (fl->prc < len || (WIPE_PRC)))
-		aply_precision_str(str, fl);
-}
 
 uintmax_t	aply_size_un(t_args *fl, va_list *param)
 {

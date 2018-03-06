@@ -6,7 +6,7 @@
 #    By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/15 13:16:28 by inovykov          #+#    #+#              #
-#    Updated: 2018/03/05 16:06:08 by inovykov         ###   ########.fr        #
+#    Updated: 2018/03/06 21:14:12 by inovykov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ DIR_S = src
 HEADER = includes
 
 SOURCES = ft_printf.c ft_itoa_base.c ft_itoa_un.c collect_parameters.c \
-			process_num.c aply_param.c
+			process_num.c aply_param.c unicode.c extracting_content.c \
+			width.c precision.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 

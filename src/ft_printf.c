@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 14:53:10 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 19:51:15 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 21:18:44 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,31 @@ void	put_struct(t_args *param)
 	param->spec = '0';
 	param->hold = '0';
 	param->apl_fl0 = 0;
+}
+
+int		put_arg(t_args *fl, va_list **param)
+{
+	int				len;
+	char			*tmp;
+	int				zero_char;
+
+	tmp = NULL;
+	len = 0;
+	zero_char = 0;
+	extract_arg(fl, param, &tmp, &zero_char);
+	if (fl->is_prc == 1)
+		aply_precision(&tmp, fl, (int)ft_strlen(tmp));
+	aply_hash(&tmp, fl);
+	if (fl->width > (int)ft_strlen(tmp))
+		aply_width(&tmp, fl, (int)ft_strlen(tmp));
+	else
+		aply_flg(fl, &tmp, len);
+	len = (int)ft_strlen(tmp);
+	if (zero_char == 1)
+		len = len + 1;
+	write(1, tmp, len);
+	free(tmp);
+	return (len);
 }
 
 int		do_magic(const char **format, va_list *param, t_args *fl)
