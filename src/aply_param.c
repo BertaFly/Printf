@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:02:00 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 21:43:27 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 19:53:31 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,34 +23,6 @@ void	aply_precision_str(char **str, t_args *fl)
 	while (++k < fl->prc)
 		str[0][k] = tmp[k];
 	free(tmp);
-}
-
-void	aply_precision_nbr(char **str, t_args *fl, int len)
-{
-	char			*tmp;
-	int				k;
-
-	k = fl->prc;
-	if ((IS_NUM(fl->spec)) && len <= fl->prc)
-	{
-		tmp = ft_strdup(*str);
-		free(*str);
-		ft_atoi(tmp) < 0 ? k++ : k;
-		str[0] = ft_strnew(k);
-		ft_memset(str[0], '0', (size_t)k);
-		while (len > 0 && tmp[len - 1] != '-')
-		{
-			str[0][--k] = tmp[len - 1];
-			len--;
-		}
-		if (ft_atoi(tmp) < 0)
-			str[0][0] = '-';
-		free(tmp);
-	}
-	if ((IS_NUM(fl->spec)) && (WIPE_PRC) && ft_atoi(*str) == 0)
-		str[0][0] = '\0';
-	if ((S(fl->spec)) && (fl->prc < len || (WIPE_PRC)))
-		aply_precision_str(str, fl);
 }
 
 void	aply_hash_2(char *tmp, int len, char **str)
@@ -126,15 +98,12 @@ void	aply_width_not_nbr(char **str, t_args *fl, int len)
 	free(tmp);
 }
 
-void	aply_width(char **str, t_args *fl)
+void	aply_width(char **str, t_args *fl, int len)
 {
 	char			*tmp;
-	int				len;
 	int				i;
 	int				k;
-	int				apl_fl0;
 
-	len = (int)ft_strlen(*str);
 	i = -1;
 	k = -1;
 	tmp = ft_strdup(*str);
@@ -144,7 +113,7 @@ void	aply_width(char **str, t_args *fl)
 		ft_memset((void*)*str, '0', (size_t)fl->width);
 	else
 		ft_memset((void*)*str, ' ', (size_t)fl->width);
-	apl_fl0 = (str[0][0] == '0' ? 1 : 0);
+	fl->apl_fl0 = (str[0][0] == '0' ? 1 : 0);
 	if (fl->minus == '1')
 	{
 		if (fl->plus == '1' && ft_atoi(tmp) > 0)
@@ -158,13 +127,13 @@ void	aply_width(char **str, t_args *fl)
 	{
 		while (--len > -1 && tmp[len] != '-')
 		{
-			if ((tmp[len] == 'x' || tmp[len] == 'X') && apl_fl0 == 1)
+			if ((tmp[len] == 'x' || tmp[len] == 'X') && fl->apl_fl0 == 1)
 				break ;
 			str[0][--fl->width] = tmp[len];
 		}
-		if (ft_atoi(tmp) < 0 && apl_fl0 == 1 && !(U_NUM(fl->spec)))
+		if (ft_atoi(tmp) < 0 && fl->apl_fl0 == 1 && !(U_NUM(fl->spec)))
 			str[0][0] = '-';
-		else if (ft_atoi(tmp) < 0 && apl_fl0 == 0 && !(U_NUM(fl->spec)))
+		else if (ft_atoi(tmp) < 0 && fl->apl_fl0 == 0 && !(U_NUM(fl->spec)))
 			str[0][--fl->width] = '-';
 		if (fl->plus == '1' && fl->zero == '1' && ft_atoi(tmp) >= 0)
 			str[0][0] = '+';
@@ -172,7 +141,7 @@ void	aply_width(char **str, t_args *fl)
 			str[0][--fl->width] = '+';
 		if (fl->plus == '0' && ft_atoi(tmp) >= 0 && fl->space == '1')
 			str[0][0] = ' ';
-		if ((SAVE_0X) && apl_fl0 == 1)
+		if ((SAVE_0X) && fl->apl_fl0 == 1)
 			str[0][1] = (ft_strchr(tmp, 'X') == NULL ? 'x' : 'X');
 	}
 	free(tmp);
@@ -279,16 +248,16 @@ int		put_arg(t_args *fl, va_list **param)
 	tmp = NULL;
 	len = 0;
 	zero_char = 0;
-	if (fl->spec == 'c' || fl->spec == 'C' || fl->spec == '0')
+	if ((C(fl->spec)) || fl->hold != '0')
 	{
-		if ((fl->spec == 'C' && MB_CUR_MAX == 1) || (fl->spec == 'c' && fl->size != '3'))
+		if ((fl->spec == 'C' && MB_CUR_MAX == 1) || (fl->spec == 'c' && fl->size != 3))
 		{
 			tmp = ft_strnew(1);
 			tmp[0] = (char)va_arg(**param, int);
 			if (tmp[0] == 0)
 				zero_char = 1;
 		}
-		else if (fl->spec == 'C' || (fl->spec == 'c' && fl->size == '3'))
+		else if (fl->spec == 'C' || (fl->spec == 'c' && fl->size == 3))
 		{
 			tmp = ft_strnew(4);
 			uni_char = va_arg(**param, unsigned int);
@@ -308,7 +277,7 @@ int		put_arg(t_args *fl, va_list **param)
 	}
 	else if (fl->spec == 's' || fl->spec == 'S')
 	{
-		if ((fl->spec == 'S' && MB_CUR_MAX == 1) || (fl->spec == 's' && fl->size != '3'))
+		if ((fl->spec == 'S' && MB_CUR_MAX == 1) || (fl->spec == 's' && fl->size != 3))
 		{
 			tmp = ft_strdup((char *)va_arg(**param, char*));
 			if (tmp == NULL)
@@ -327,7 +296,7 @@ int		put_arg(t_args *fl, va_list **param)
 		if (!(IS_NUM(fl->spec)))
 			aply_width_not_nbr(&tmp, fl, (int)ft_strlen(tmp));
 		else
-			aply_width(&tmp, fl);
+			aply_width(&tmp, fl, (int)ft_strlen(tmp));
 	}
 	else
 	{

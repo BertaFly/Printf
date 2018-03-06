@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:36:16 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 21:33:20 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 19:45:04 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,6 @@ static int	ft_len(int nbr)
 	return (len);
 }
 
-void		put_struct(t_args *param)
-{
-	param->minus = '0';
-	param->plus = '0';
-	param->space = '0';
-	param->hash = '0';
-	param->zero = '0';
-	param->width = 0;
-	param->is_prc = 0;
-	param->prc = 0;
-	param->size = '0';
-	param->spec = '0';
-	param->hold = '0';
-}
-
 void		mem_flg(const char *format, t_args *fl)
 {
 	if (*format == '+')
@@ -56,24 +41,24 @@ void		mem_flg(const char *format, t_args *fl)
 
 int			mem_size(const char *format, int i, t_args *fl)
 {
-	if (format[i] == 'h' && format[i + 1] == 'h')
+	if (format[i] == 'h' && format[i + 1] == 'h' && fl->size < 1)
 	{
 		i++;
-		fl->size = '1';
+		fl->size = 1;
 	}
-	else if (format[i] == 'h' && format[i + 1] != 'h')
-		fl->size = '2';
-	else if (format[i] == 'l' && format[i + 1] != 'l')
-		fl->size = '3';
-	else if (format[i] == 'l' && format[i + 1] == 'l')
+	else if (format[i] == 'h' && format[i + 1] != 'h' && fl->size < 2)
+		fl->size = 2;
+	else if (format[i] == 'l' && format[i + 1] != 'l' && fl->size < 3)
+		fl->size = 3;
+	else if (format[i] == 'l' && format[i + 1] == 'l' && fl->size < 4)
 	{
 		i++;
-		fl->size = '4';
+		fl->size = 4;
 	}
-	else if (format[i] == 'j')
-		fl->size = '5';
-	else
-		fl->size = '6';
+	else if (format[i] == 'j' && fl->size < 5)
+		fl->size = 5;
+	else if (format[i] == 'z' && fl->size < 6)
+		fl->size = 6;
 	return (i);
 }
 

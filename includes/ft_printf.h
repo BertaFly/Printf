@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/05 21:28:02 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 19:52:53 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@
 # define WIPE_PRC (fl->is_prc == 1 && fl->prc == 0)
 # define HASH_X0 (str[0][0] == '0' && fl->is_prc == 0)
 # define SAVE_0X (ft_strchr(tmp, 'x') != NULL || ft_strchr(tmp, 'X') != NULL)
-# define NOT_HASH ((fl->spec != 'o' && fl->spec != 'O' && fl->spec != 'x' && \
-fl->spec != 'X') || (*str[0] == '0' && (fl->spec == 'o' || fl->spec == 'O')))
+# define NOT_HASH ((!(U_8(fl->spec)) && !(U_16(fl->spec))) || (N_HASH2))
+# define N_HASH2 (*str[0] == '0' && (U_8(fl->spec)))
+# define RET_ER (fl.spec == 'S' && fl.is_prc != 0 && res == 0 && count == 0)
 # include <stdarg.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -49,9 +50,10 @@ typedef struct		s_args
 	int		width;
 	int		is_prc;
 	int		prc;
-	char	size;
+	int		size;
 	char	spec;
 	char	hold;
+	int		apl_fl0;
 }					t_args;
 
 char				*ft_itoa_un(unsigned long long nbr);
@@ -67,7 +69,7 @@ void				aply_precision_nbr(char **str, t_args *fl, int len);
 void				aply_hash_2(char *tmp, int len, char **str);
 void				aply_hash(char **str, t_args *fl);
 int					put_arg(t_args *fl, va_list **param);
-void				aply_width(char **str, t_args *fl);
+void				aply_width(char **str, t_args *fl, int len);
 void				aply_width_not_nbr(char **str, t_args *fl, int len);
 void				aply_hash(char **str, t_args *fl);
 long long			aply_size(t_args *fl, va_list *param);
