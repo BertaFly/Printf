@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 12:37:17 by inovykov          #+#    #+#             */
-/*   Updated: 2018/02/22 17:31:22 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 22:46:45 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ char	*ft_strdup(const char *s1)
 	char	*dst;
 	char	*d;
 
+	if (s1 == NULL)
+		return (NULL);
 	len = ft_strlen(s1);
 	dst = ft_strnew(len);
-	if (!dst || s1 == NULL)
-		return (NULL);
 	d = dst;
 	while (*s1)
 		*d++ = *s1++;

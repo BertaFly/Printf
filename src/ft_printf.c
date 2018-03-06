@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 14:53:10 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 21:18:44 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 21:33:46 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void	put_struct(t_args *param)
 
 int		put_arg(t_args *fl, va_list **param)
 {
-	int				len;
-	char			*tmp;
-	int				zero_char;
+	int		len;
+	char	*tmp;
+	int		z_chr;
 
 	tmp = NULL;
 	len = 0;
-	zero_char = 0;
-	extract_arg(fl, param, &tmp, &zero_char);
+	z_chr = 0;
+	extr_arg(fl, param, &tmp, &z_chr);
 	if (fl->is_prc == 1)
 		aply_precision(&tmp, fl, (int)ft_strlen(tmp));
 	aply_hash(&tmp, fl);
@@ -46,7 +46,7 @@ int		put_arg(t_args *fl, va_list **param)
 	else
 		aply_flg(fl, &tmp, len);
 	len = (int)ft_strlen(tmp);
-	if (zero_char == 1)
+	if (z_chr == 1)
 		len = len + 1;
 	write(1, tmp, len);
 	free(tmp);
@@ -105,7 +105,7 @@ int		ft_printf_exten(const char *format, va_list *param)
 	return (len);
 }
 
-int	ft_printf(const char *format, ...)
+int		ft_printf(const char *format, ...)
 {
 	va_list	param;
 	int		len;

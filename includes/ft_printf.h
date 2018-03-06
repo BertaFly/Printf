@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 13:21:44 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 21:19:55 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 22:49:35 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define RET_ER (fl.spec == 'S' && fl.is_prc != 0 && res == 0 && count == 0)
 # define SMAL_S (fl->spec == 's' && fl->size != 3)
 # define SMAL_C (fl->spec == 'c' && fl->size != 3)
+# define NO_NU (fl->spec != 'O' && fl->spec != 'U')
+# define O_U (fl->spec == 'O' || fl->spec == 'U')
 # include <stdarg.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -42,7 +44,7 @@
 # include <stdlib.h>
 # include "../libft/includes/libft.h"
 
-typedef struct		s_args
+typedef struct	s_args
 {
 	char	minus;
 	char	plus;
@@ -56,34 +58,51 @@ typedef struct		s_args
 	char	spec;
 	char	hold;
 	int		apl_fl0;
-}					t_args;
+}				t_args;
 
-char				*ft_itoa_un(unsigned long long nbr);
-char				*ft_itoa_base(unsigned long long value, int base);
-void				put_struct(t_args *param);
-void				mem_flg(const char *format, t_args *fl);
-int					mem_size(const char *format, int i, t_args *fl);
-int					mem_digit(const char *format, int i, t_args *fl);
-int					parce_flg(const char *format, t_args *fl);
-void				process_num(char **tmp, t_args *fl, va_list **param);
-int					put_uni_char(unsigned int a, char **tmp);
-void				extract_char(t_args *fl, va_list **param, char **tmp, int *zero_char);
-void				extract_arg(t_args *fl, va_list **param, char **tmp, int *zero_char);
-char				*put_uni_str(va_list **param);
-void				aply_precision(char **str, t_args *fl, int len);
-void				aply_precision_str(char **str, t_args *fl);
-void				aply_precision_nbr(char **str, t_args *fl, int len);
-void				aply_hash_2(char *tmp, int len, char **str);
-void				aply_hash(char **str, t_args *fl);
-void				aply_flg(t_args *fl, char **tmp, int len);
-int					put_arg(t_args *fl, va_list **param);
-void				aply_width(char **str, t_args *fl, int len);
-void				aply_width_nbr(char **str, t_args *fl, int len);
-void				aply_width_symb(char **str, t_args *fl, int len);
-void				aply_hash(char **str, t_args *fl);
-long long			aply_size(t_args *fl, va_list *param);
-uintmax_t			aply_size_un(t_args *fl, va_list *param);
-int					ft_printf_exten(const char *format, va_list *param);
-int					ft_printf(const char *format, ...);
+typedef struct	s_mask
+{
+	unsigned int	uno;
+	unsigned int	dos;
+	unsigned int	tres;
+	unsigned char	o1;
+	unsigned char	o2;
+	unsigned char	o3;
+	unsigned char	o4;
+	unsigned char	octet;
+}				t_mask;
+
+char			*ft_itoa_un(unsigned long long nbr);
+char			*ft_itoa_base(unsigned long long value, int base);
+void			put_struct(t_args *param);
+void			mem_flg(const char *format, t_args *fl);
+
+/*
+*** file_name.c
+*/
+
+int				mem_size(const char *format, int i, t_args *fl);
+int				mem_digit(const char *format, int i, t_args *fl);
+int				parce_flg(const char *format, t_args *fl);
+void			process_num(char **tmp, t_args *fl, va_list **param);
+int				put_uni_char(unsigned int a, char **tmp);
+void			extr_char(t_args *fl, va_list **param, char **tmp, int *z_chr);
+void			extr_arg(t_args *fl, va_list **param, char **tmp, int *z_chr);
+char			*put_uni_str(va_list **param);
+void			aply_precision(char **str, t_args *fl, int len);
+void			aply_precision_str(char **str, t_args *fl);
+void			aply_precision_nbr(char **str, t_args *fl, int len);
+void			aply_hash_2(char *tmp, int len, char **str);
+void			aply_hash(char **str, t_args *fl);
+void			aply_flg(t_args *fl, char **tmp, int len);
+int				put_arg(t_args *fl, va_list **param);
+void			aply_width(char **str, t_args *fl, int len);
+void			aply_width_nbr(char **str, t_args *fl, int len);
+void			aply_width_symb(char **str, t_args *fl, int len);
+void			aply_hash(char **str, t_args *fl);
+long long		aply_size(t_args *fl, va_list *param);
+uintmax_t		aply_size_un(t_args *fl, va_list *param);
+int				ft_printf_exten(const char *format, va_list *param);
+int				ft_printf(const char *format, ...);
 
 #endif

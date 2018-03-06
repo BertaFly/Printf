@@ -6,70 +6,95 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 20:10:21 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 20:10:29 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 22:21:36 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-int		put_uni_char(unsigned int a, char **tmp)
+void	initial_masks(t_mask *mask)
 {
-	unsigned char	octet;
-	unsigned char	o2;
-	unsigned char	o1;
-	unsigned char	o3;
-	unsigned char	o4;
-	unsigned int	mask1;
-	unsigned int	mask2;
-	unsigned int	mask3;
+	mask->uno = 49280;
+	mask->dos = 14712960;
+	mask->tres = 4034953344;
+	mask->o1 = '0';
+	mask->o2 = '0';
+	mask->o3 = '0';
+	mask->o4 = '0';
+	mask->octet = '0';
+}
 
-	mask1 = 49280;
-	mask2 = 14712960;
-	mask3 = 4034953344;
+void	put_uni_char_up2(unsigned int a, char **tmp, t_mask *mask)
+{
 	if (a <= 127)
 	{
-		octet = a;
-		tmp[0][0] = octet;
+		mask->octet = a;
+		tmp[0][0] = mask->octet;
+	}
+	else
+	{
+		mask->o2 = (a << 26) >> 26;
+		mask->o1 = ((a >> 6) << 27) >> 27;
+		mask->octet = (mask->uno >> 8) | mask->o1;
+		tmp[0][0] = mask->octet;
+		mask->octet = ((mask->uno << 24) >> 24) | mask->o2;
+		tmp[0][1] = mask->octet;
+	}
+}
+
+void	put_uni_char_up4(unsigned int a, char **tmp, t_mask *mask)
+{
+	if (a <= 65535)
+	{
+		mask->o3 = (a << 26) >> 26;
+		mask->o2 = ((a >> 6) << 26) >> 26;
+		mask->o1 = ((a >> 12) << 28) >> 28;
+		mask->octet = (mask->dos >> 16) | mask->o1;
+		tmp[0][0] = mask->octet;
+		mask->octet = ((mask->dos << 16) >> 24) | mask->o2;
+		tmp[0][1] = mask->octet;
+		mask->octet = ((mask->dos << 24) >> 24) | mask->o3;
+		tmp[0][2] = mask->octet;
+	}
+	else
+	{
+		mask->o4 = (a << 26) >> 26;
+		mask->o3 = ((a >> 6) << 26) >> 26;
+		mask->o2 = ((a >> 12) << 26) >> 26;
+		mask->o1 = ((a >> 18) << 29) >> 29;
+		mask->octet = (mask->tres >> 24) | mask->o1;
+		tmp[0][0] = mask->octet;
+		mask->octet = ((mask->tres << 8) >> 24) | mask->o2;
+		tmp[0][1] = mask->octet;
+		mask->octet = ((mask->tres << 16) >> 24) | mask->o3;
+		tmp[0][2] = mask->octet;
+		mask->octet = ((mask->tres << 24) >> 24) | mask->o4;
+		tmp[0][3] = mask->octet;
+	}
+}
+
+int		put_uni_char(unsigned int a, char **tmp)
+{
+	t_mask	mask;
+
+	initial_masks(&mask);
+	if (a <= 127)
+	{
+		put_uni_char_up2(a, tmp, &mask);
 		return (1);
 	}
 	else if (a <= 2047)
 	{
-		o2 = (a << 26) >> 26;
-		o1 = ((a >> 6) << 27) >> 27;
-		octet = (mask1 >> 8) | o1;
-		tmp[0][0] = octet;
-		octet = ((mask1 << 24) >> 24) | o2;
-		tmp[0][1] = octet;
+		put_uni_char_up2(a, tmp, &mask);
 		return (2);
 	}
 	else if (a <= 65535)
 	{
-		o3 = (a << 26) >> 26;
-		o2 = ((a >> 6) << 26) >> 26;
-		o1 = ((a >> 12) << 28) >> 28;
-		octet = (mask2 >> 16) | o1;
-		tmp[0][0] = octet;
-		octet = ((mask2 << 16) >> 24) | o2;
-		tmp[0][1] = octet;
-		octet = ((mask2 << 24) >> 24) | o3;
-		tmp[0][2] = octet;
+		put_uni_char_up4(a, tmp, &mask);
 		return (3);
 	}
 	else
-	{
-		o4 = (a << 26) >> 26;
-		o3 = ((a >> 6) << 26) >> 26;
-		o2 = ((a >> 12) << 26) >> 26;
-		o1 = ((a >> 18) << 29) >> 29;
-		octet = (mask3 >> 24) | o1;
-		tmp[0][0] = octet;
-		octet = ((mask3 << 8) >> 24) | o2;
-		tmp[0][1] = octet;
-		octet = ((mask3 << 16) >> 24) | o3;
-		tmp[0][2] = octet;
-		octet = ((mask3 << 24) >> 24) | o4;
-		tmp[0][3] = octet;
-	}
+		put_uni_char_up4(a, tmp, &mask);
 	return (4);
 }
 

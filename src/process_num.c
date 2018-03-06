@@ -6,7 +6,7 @@
 /*   By: inovykov <inovykov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 15:49:21 by inovykov          #+#    #+#             */
-/*   Updated: 2018/03/06 20:45:03 by inovykov         ###   ########.fr       */
+/*   Updated: 2018/03/06 21:42:22 by inovykov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ uintmax_t	aply_size_un(t_args *fl, va_list *param)
 	uintmax_t	nbr;
 
 	nbr = va_arg(*param, uintmax_t);
-	if (fl->size == 1 && fl->spec != 'p' && fl->spec != 'O' && fl->spec != 'U')
+	if (fl->size == 1 && fl->spec != 'p' && (NO_NU))
 		nbr = (unsigned char)nbr;
-	else if (fl->size == 2 && fl->spec != 'p' && fl->spec != 'O' && fl->spec != 'U')
+	else if (fl->size == 2 && fl->spec != 'p' && (NO_NU))
 		nbr = (unsigned short int)nbr;
-	else if ((fl->size == 3 || fl->spec == 'p') && fl->spec != 'O' && fl->spec != 'U')
+	else if ((fl->size == 3 || fl->spec == 'p') && (NO_NU))
 		nbr = (unsigned long int)nbr;
-	else if (fl->size == 4 && fl->spec != 'p' && fl->spec != 'O' && fl->spec != 'U')
+	else if (fl->size == 4 && fl->spec != 'p' && (NO_NU))
 		nbr = (unsigned long long int)nbr;
-	else if (fl->size == 5 && fl->spec != 'p' && fl->spec != 'O' && fl->spec != 'U')
+	else if (fl->size == 5 && fl->spec != 'p' && (NO_NU))
 		nbr = (uintmax_t)nbr;
-	else if (fl->size == 6 && fl->spec != 'p' && fl->spec != 'O' && fl->spec != 'U')
+	else if (fl->size == 6 && fl->spec != 'p' && (NO_NU))
 		nbr = (uint64_t)nbr;
-	else if (fl->size == 0 && fl->spec != 'p' && fl->spec != 'O' && fl->spec != 'U')
+	else if (fl->size == 0 && fl->spec != 'p' && (NO_NU))
 		nbr = (unsigned int)nbr;
-	else if ((fl->spec == 'O' || fl->spec == 'U') && (fl->size == 1 || fl->size == 2))
+	else if ((O_U) && (fl->size == 1 || fl->size == 2))
 		nbr = (long int)nbr;
 	return (nbr);
 }
@@ -66,7 +66,7 @@ void		process_num(char **tmp, t_args *fl, va_list **param)
 	unsigned long long	u_nbr;
 	int					k;
 
-	k = 0;
+	k = -1;
 	nbr = 0;
 	u_nbr = 0;
 	if (U_NUM(fl->spec))
@@ -74,12 +74,7 @@ void		process_num(char **tmp, t_args *fl, va_list **param)
 	else
 		nbr = aply_size(fl, &**param);
 	if ((S_10(fl->spec)) || (U_10(fl->spec)))
-	{
-		if (S_10(fl->spec))
-			*tmp = ft_itoa(nbr);
-		else
-			*tmp = ft_itoa_un(u_nbr);
-	}
+		*tmp = (S_10(fl->spec) ? ft_itoa(nbr) : ft_itoa_un(u_nbr));
 	else if (fl->spec == 'o' || fl->spec == 'O')
 		*tmp = ft_itoa_base(u_nbr, 8);
 	else if ((U_16(fl->spec)) || fl->spec == 'p')
@@ -87,11 +82,8 @@ void		process_num(char **tmp, t_args *fl, va_list **param)
 		*tmp = ft_itoa_base(u_nbr, 16);
 		if (fl->spec == 'X')
 		{
-			while (tmp[0][k])
-			{
+			while (tmp[0][++k])
 				tmp[0][k] = ft_toupper(tmp[0][k]);
-				k++;
-			}
 		}
 	}
 }
