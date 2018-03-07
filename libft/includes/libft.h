@@ -89,5 +89,7 @@ void				ft_swap(int *a, int *b);
 int					ft_factorial(int nb);
 int					ft_is_space(char c);
 size_t				ft_list_size(t_list *begin_list);
+char				*ft_itoa_un(unsigned long long nbr);
+char				*ft_itoa_base(unsigned long long value, int base);
 
 #endif

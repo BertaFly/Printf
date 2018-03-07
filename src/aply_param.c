@@ -56,6 +56,10 @@ void	aply_hash(char **str, t_args *fl)
 	free(tmp);
 }
 
+/*
+*** Puts space or + where it needed according to flgs
+*/
+
 void	aply_flg(t_args *fl, char **tmp, int len)
 {
 	char			*tmp2;

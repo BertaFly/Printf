@@ -41,6 +41,10 @@ void	aply_width_symb(char **str, t_args *fl, int len)
 	free(tmp);
 }
 
+/*
+*** Symbols in str align right
+*/
+
 void	aply_width_nbr_f_e(char *tmp, char **str, t_args *fl, int len)
 {
 	while (--len > -1 && tmp[len] != '-')

@@ -37,6 +37,7 @@
 # define SMAL_C (fl->spec == 'c' && fl->size != 3)
 # define NO_NU (fl->spec != 'O' && fl->spec != 'U')
 # define O_U (fl->spec == 'O' || fl->spec == 'U')
+
 # include <stdarg.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -72,36 +73,72 @@ typedef struct	s_mask
 	unsigned char	octet;
 }				t_mask;
 
-char			*ft_itoa_un(unsigned long long nbr);
-char			*ft_itoa_base(unsigned long long value, int base);
-void			put_struct(t_args *param);
-void			mem_flg(const char *format, t_args *fl);
-
 /*
-*** file_name.c
+*** collect_parameters.c
 */
 
+void			mem_flg(const char *format, t_args *fl);
 int				mem_size(const char *format, int i, t_args *fl);
 int				mem_digit(const char *format, int i, t_args *fl);
 int				parce_flg(const char *format, t_args *fl);
-void			process_num(char **tmp, t_args *fl, va_list **param);
+
+/*
+*** unicode.c
+*/
+
+void			initial_masks(t_mask *mask);
+void			put_uni_char_upt3(unsigned int a, char **tmp, t_mask *mask);
+void			put_uni_char_upt4(unsigned int a, char **tmp, t_mask *mask);
 int				put_uni_char(unsigned int a, char **tmp);
+char			*put_uni_str(va_list **param);
+
+/*
+*** pricess_num.c
+*/
+
+uintmax_t		aply_size_un(t_args *fl, va_list *param);
+long long		aply_size(t_args *fl, va_list *param);
+void			process_num(char **tmp, t_args *fl, va_list **param);
+
+/*
+*** extracting_content.c
+*/
+
 void			extr_char(t_args *fl, va_list **param, char **tmp, int *z_chr);
 void			extr_arg(t_args *fl, va_list **param, char **tmp, int *z_chr);
-char			*put_uni_str(va_list **param);
-void			aply_precision(char **str, t_args *fl, int len);
+
+/*
+*** precision.c
+*/
+
 void			aply_precision_str(char **str, t_args *fl);
 void			aply_precision_nbr(char **str, t_args *fl, int len);
+void			aply_precision(char **str, t_args *fl, int len);
+
+/*
+*** width.c
+*/
+
+void			aply_width_symb(char **str, t_args *fl, int len);
+void			aply_width_nbr_f_e(char *tmp, char **str, t_args *fl, int len);
+void			aply_width_nbr(char **str, t_args *fl, int len);
+void			aply_width(char **tmp, t_args *fl, int len);
+
+/*
+*** aply_param.c
+*/
+
 void			aply_hash_2(char *tmp, int len, char **str);
 void			aply_hash(char **str, t_args *fl);
 void			aply_flg(t_args *fl, char **tmp, int len);
+
+/*
+*** ft_printf.c
+*/
+
+void			put_struct(t_args *param);
 int				put_arg(t_args *fl, va_list **param);
-void			aply_width(char **str, t_args *fl, int len);
-void			aply_width_nbr(char **str, t_args *fl, int len);
-void			aply_width_symb(char **str, t_args *fl, int len);
-void			aply_hash(char **str, t_args *fl);
-long long		aply_size(t_args *fl, va_list *param);
-uintmax_t		aply_size_un(t_args *fl, va_list *param);
+int				do_magic(const char **format, va_list *param, t_args *fl);
 int				ft_printf_exten(const char *format, va_list *param);
 int				ft_printf(const char *format, ...);
 

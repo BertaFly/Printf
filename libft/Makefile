@@ -83,6 +83,7 @@ SOURCES =	ft_memset.c \
 		ft_list_size.c \
 		ft_factorial.c \
 		ft_is_space.c \
+		ft_itoa_un.c ft_itoa_base.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
@@ -95,11 +96,11 @@ all: obj $(NAME)
 $(NAME): $(OBJS)
 	@ar rc $(NAME) $(OBJS)
 	@ranlib $(NAME)
-	@echo libft.a is ready
+	@echo "libft.a is ready"
 
 obj:
 	@mkdir -p obj
-	@echo Creating libft object files
+	@echo "Creating libft object files"
 
 $(DIR_O)/%.o : $(DIR_S)/%.c
 	@gcc $(FLAGS) -I $(HEADER) -o $@ -c $<
@@ -107,10 +108,10 @@ $(DIR_O)/%.o : $(DIR_S)/%.c
 clean:
 	@/bin/rm -f $(OBJS)
 	@/bin/rm -rf $(DIR_O)
-	@echo A foulder with libft object files was removed
+	@echo "A foulder with libft object files was removed"
 
 fclean: clean
 	@/bin/rm -f $(NAME)
-	@echo libft.a was removed
+	@echo "libft.a was removed"
 
 re: fclean all
